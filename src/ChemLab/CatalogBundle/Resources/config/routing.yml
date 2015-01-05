@@ -1,3 +1,20 @@
 chem_lab_catalog_homepage:
     path:     /catalog
     defaults: { _controller: ChemLabCatalogBundle:Default:index }
+
+chem_lab_catalog_rest:
+    path:         /catalog/items/{id}
+    defaults:     { _controller: ChemLabCatalogBundle:Rest:main }
+    methods:      [GET, POST, PUT, PATCH, DELETE]
+    requirements: { id: \d+ }
+
+chem_lab_catalog_list:
+    path:         /catalog/items/{start}-{end}/{sort}
+    defaults:     
+        _controller: ChemLabCatalogBundle:Rest:list
+        sort:     
+    methods:      [GET]
+    requirements:
+        start:    \d+
+        end:      \d+
+        sort:     "[\+\-](?:id|name|description|code|type|price)"

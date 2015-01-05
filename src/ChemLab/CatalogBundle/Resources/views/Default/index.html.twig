@@ -4,8 +4,7 @@
 {% block title %}Gestione catalogo{% endblock %}
 
 {% block stylesheets %}
-		<link rel="stylesheet" href="/common/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="{{ asset('bundles/chemlab/css/base.css') }}"/>
+		<link rel="stylesheet" href="/common/css/site.min.css"/>
 {% endblock %}
 {% block javascripts %}
 		<script type="text/javascript" src="/common/js/jquery-2.1.3.min.js"></script>
@@ -20,20 +19,83 @@
 	{{ navbar.draw() }}
 	<div class="container">
 		<h2>Gestore catalogo</h2>
-        <button type="button" class="btn btn-primary" id="addItem"><span class="glyphicon glyphicon-plus"></span> Aggiungi articolo</button>
-        <div id="output"></div>
+        <nav id="mainPagination"></nav>
+        <button type="button" class="btn btn-primary" id="addItem" data-toggle="modal" data-target="#itemModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi articolo</button>
+        <div id="tableOutput"></div>
 	</div>
+    <div id="itemModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" action="">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span><span class="sr-only">Chiudi</span></button>
+                    <h4 class="modal-title" id="itemModalLabel">Aggiungi un articolo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="itemName" class="col-sm-3 control-label">Nome</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="itemName" name="name" placeholder="Nome articolo" autofocus="autofocus" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDescription" class="col-sm-3 control-label">Descrizione</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="itemDescription" name="description" placeholder="Descrizione articolo" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemCode" class="col-sm-3 control-label">Codice</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="itemCode" name="code" placeholder="Codice articolo" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemType" class="col-sm-3 control-label">Tipo</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="itemType" name="type">
+                                    <option value="reagent">Reagente</option>
+                                    <option value="solvent">Solvente</option>
+                                    <option value="glassware">Vetreria</option>
+                                    <option value="equipment">Attrezzatura</option>
+                                    <option value="other">Altro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemPrice" class="col-sm-3 control-label">Prezzo in &euro;</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="itemPrice" name="price" min="0"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger hidden"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script type="text/html" data-template-name="table">
         {% verbatim %}
         {{#hasItems}}
         <table class='table table-striped'>
             <thead>
-                <tr><th>Articolo</th><th>Codice</th><th>Tipo</th><th>Prezzo</th></tr>
+                <tr>
+                {{#headers}}
+                    <th{{#sorted}} class="sort-{{sorted}}"{{/sorted}}><a href="#{{page}}/{{sorting}}">{{text}}</a></th>
+                {{/headers}}
+                </tr>
             </thead>
             <tbody>
                 {{#items}}
                 <tr>
-                    <td>{{name}}</td>
+                    <td class="item-head">
+                        <a href="#" data-toggle="modal" data-target="#itemModal" data-item-id="{{id}}">{{name}}</a>
+                        {{{description}}}
+                    </td>
                     <td>{{code}}</td>
                     <td>{{type}}</td>
                     <td class="text-right">{{price}}</td>
@@ -43,6 +105,40 @@
         </table>
         {{/hasItems}}
         {{^hasItems}}<em>Nessun articolo nel catalogo</em>{{/hasItems}}
+        {% endverbatim %}
+    </script>
+    <script type="text/html" data-template-name="alert">
+        {% verbatim %}
+        <div class="alert alert-{{ type }}" role="alert">
+            {{#dismissable}}
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span><span class="sr-only">Nascondi</span></button>
+            {{/dismissable}}
+            {{message}}
+        </div>
+        {% endverbatim %}
+    </script>
+    <script type="text/html" data-template-name="paginator">
+        {% verbatim %}
+        <ul class="pagination">
+        {{#pages}}
+            {{#skip}}
+            <li>&hellip;</li>
+            {{/skip}}
+            {{#prev}}
+            <li><a href="#{{prev}}{{sorting}}" aria-label="Precedente">
+                <span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span>
+            </a></li>
+            {{/prev}}
+            {{#next}}
+            <li><a href="#{{next}}{{sorting}}" aria-label="Successivo">
+                <span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+            </a></li>
+            {{/next}}
+            {{#page}}
+            <li><a href="#{{page}}{{sorting}}"{{#active}} class="active"{{/active}}>{{page}}</a></li>
+            {{/page}}                
+        {{/pages}}
+        </ul>
         {% endverbatim %}
     </script>
 {% endblock %}

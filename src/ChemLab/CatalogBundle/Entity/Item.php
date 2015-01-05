@@ -3,6 +3,7 @@
 namespace ChemLab\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Item
@@ -25,6 +26,7 @@ class Item
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=80)
+     * @Assert\NotBlank(message = "Il nome dell'articolo non può essere vuoto")
      */
     private $name;
 
@@ -39,6 +41,7 @@ class Item
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=24)
+     * @Assert\NotBlank(message = "Il codice dell'articolo non può essere vuoto")
      */
     private $code;
 
@@ -46,6 +49,7 @@ class Item
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=24)
+     * @Assert\Choice(choices = {"solvent", "reagent", "glassware", "equipment", "other"}, message = "Scegliere un tipo valido")
      */
     private $type;
 
@@ -53,6 +57,7 @@ class Item
      * @var float
      *
      * @ORM\Column(name="price", type="float")
+     * @Assert\GreaterThanOrEqual(value=0, message="Inserire un valore non negativo")
      */
     private $price;
 

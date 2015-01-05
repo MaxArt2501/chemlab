@@ -1,0 +1,84 @@
+body {
+	background: #f4edff url(/common/images/chemlab-bg.png) no-repeat 50px 0px;
+}
+
+.table .sort-ascending:after,
+.table .sort-descending:after {
+    &:extend(.glyphicon);
+    margin-left: .25em;
+}
+.table .sort-ascending:after {
+    &:extend(.glyphicon-chevron-down:before);
+}
+.table .sort-descending:after {
+    &:extend(.glyphicon-chevron-up:before);
+}
+
+.item-head > a {
+    font-weight: bold;
+    color: inherit;
+}
+.item-head > p {
+    margin: 0;
+    font-size: @font-size-small;
+    font-weight: normal;
+    font-style: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: gray;
+}
+
+.global-spinner {
+    &:extend(.glyphicon);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, .05);
+	font-size: 96px;
+}
+.global-spinner:before, .global-spinner:after {
+	&:extend(.glyphicon-cog:before);
+	position: absolute;
+	color: rgba(0, 0, 0, .3);
+	top: 50%;
+	left: 50%;
+}
+.global-spinner:before {
+	margin: -78px 24px;
+	-webkit-animation: spinning 4s linear infinite reverse;
+	animation: spinning 4s linear infinite reverse;
+}
+.global-spinner:after {
+	margin: -10px -24px;
+	-webkit-animation: spinning 4s linear infinite normal;
+	animation: spinning 4s linear infinite normal;
+}
+
+@-webkit-keyframes spinning {
+	from { -webkit-transform: rotate(0deg); }
+	to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spinning {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+#mainPagination {
+    float: right;
+    > .pagination {
+        margin: 0;
+    }
+}
+
+.modal.show-error {
+    [type=submit], .form-horizontal {
+        display: none;
+    }
+    .alert-danger {
+        display: block !important;
+        visibility: visible !important;
+    }
+}

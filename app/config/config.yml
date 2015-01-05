@@ -30,7 +30,14 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     globals:
-        main_navbar:  %chem_lab.navbar%
+        main_navbar:
+            home:
+                desc:  Home
+                route: chem_lab_main_homepage
+            catalog:
+                desc:  Catalogo
+                route: chem_lab_catalog_homepage
+                role:  ROLE_ADMIN
 
 # Assetic Configuration
 assetic:
