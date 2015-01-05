@@ -1,0 +1,34 @@
+security:
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+
+    firewalls:
+        main:
+            pattern: ^/
+            # Quando form_login: ~, è come form_login: { login_path: login, check_path: login_check } (valori di default)
+            form_login: ~
+            anonymous:  true
+            logout:
+                path:   /logout
+                target: /
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout$, role: ROLE_USER }
+        - { path: ^/login_check$, role: ROLE_USER }
+        - { path: ^/profile$, role: ROLE_USER }
+        - { path: ^/inventory, role: ROLE_USER }
+        - { path: ^/orders, role: ROLE_USER }
+        - { path: ^/catalog, role: ROLE_ADMIN }
+        - { path: ^/locations, role: ROLE_ADMIN }
+
+    providers:
+        main:
+            entity:
+                class: ChemLab\AccountBundle\Entity\User
+                property: username
+
+    encoders:
+        ChemLab\AccountBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12

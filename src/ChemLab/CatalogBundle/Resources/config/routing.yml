@@ -1,0 +1,3 @@
+chem_lab_catalog_homepage:
+    path:     /catalog
+    defaults: { _controller: ChemLabCatalogBundle:Default:index }

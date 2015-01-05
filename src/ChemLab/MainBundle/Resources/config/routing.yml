@@ -1,0 +1,3 @@
+chem_lab_main_homepage:
+    path:     /
+    defaults: { _controller: ChemLabMainBundle:Default:index }

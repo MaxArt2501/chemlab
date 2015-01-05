@@ -1,0 +1,6 @@
+services:
+    chem_lab_main.twig_ext:
+        class: ChemLab\MainBundle\Twig\TwigExt
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }

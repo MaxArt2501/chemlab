@@ -1,0 +1,24 @@
+chem_lab_catalog:
+    resource: "@ChemLabCatalogBundle/Resources/config/routing.yml"
+    prefix:   /
+
+chem_lab_account:
+    resource: "@ChemLabAccountBundle/Resources/config/routing.yml"
+    prefix:   /
+
+chem_lab_main:
+    resource: "@ChemLabMainBundle/Resources/config/routing.yml"
+    prefix:   /
+
+# app:
+    # resource: @AppBundle/Controller/
+    # type:     annotation
+
+# Login col sistema classico di Symfony
+login:
+    path:     /login
+    defaults: { _controller: ChemLabAccountBundle:Security:login }
+login_check:
+    path:     /login_check
+logout:
+    path:     /logout
