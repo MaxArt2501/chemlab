@@ -47,7 +47,7 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 					}
 				}
 
-				$entity->fromArray($input);
+				$entity->fromArray($this->parseInput($input));
 				$validator = $this->get('validator');
 				$errors = $validator->validate($entity);
 
@@ -138,5 +138,13 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 
 		return $doctrine->getRepository($this->repository)->find($id);
 	}
+
+	/**
+	 * Funzione per l'elaborazione dei dati di input. Da fare override in caso di entità
+	 * con relazioni esterne.
+	 * @param array $input
+	 * @return array
+	 */
+	protected function parseInput(array $input) { return $input; }
 }
 ?>

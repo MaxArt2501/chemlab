@@ -5,6 +5,8 @@ namespace ChemLab\CatalogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\Utilities\ArrayEntity;
+use ChemLab\InventoryBundle\Entity\Entry;
+use ChemLab\RequestBundle\Entity\Order;
 
 /**
  * Item
@@ -61,6 +63,24 @@ class Item extends ArrayEntity {
      */
     protected $price;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ChemLab\InventoryBundle\Entity\Entry", mappedBy="item")
+     */
+    protected $entries;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ChemLab\RequestBundle\Entity\Order", mappedBy="item")
+     */
+    protected $orders;
+
+	public function __construct() {
+		$this->entries = new ArrayCollection();
+		$this->orders = new ArrayCollection();
+	}
 
     /**
      * Get id
@@ -187,4 +207,78 @@ class Item extends ArrayEntity {
         return $this->type;
     }
 
-}
+
+    /**
+     * Add entries
+     *
+     * @param \ChemLab\InventoryBundle\Entity\Entry $entries
+     * @return Item
+     */
+    public function addEntry(Entry $entries)
+    {
+        $this->entries[] = $entries;
+
+        return $this;
+    }
+
+    /**
+     * Remove entries
+     *
+     * @param \ChemLab\InventoryBundle\Entity\Entry $entries
+     */
+    public function removeEntry(Entry $entries)
+    {
+        $this->entries->removeElement($entries);
+    }
+
+    /**
+     * Get entries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+
+    /**
+     * Add orders
+     *
+     * @param \ChemLab\RequestBundle\Entity\Order $orders
+     * @return Item
+     */
+    public function addOrder(Order $orders)
+    {
+        $this->orders[] = $orders;
+
+        return $this;
+    }
+
+    /**
+     * Remove orders
+     *
+     * @param \ChemLab\RequestBundle\Entity\Order $orders
+     */
+    public function removeOrder(Order $orders)
+    {
+        $this->orders->removeElement($orders);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+	public function toArray() {
+		$out = array();
+		foreach ([ 'id', 'name', 'description', 'code', 'type', 'price' ] as $prop)
+			$out[$prop] = $this->{$prop};
+
+		return $out;
+	}}

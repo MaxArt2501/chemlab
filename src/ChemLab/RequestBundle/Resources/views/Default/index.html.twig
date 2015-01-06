@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 {% import '::navbar.html.twig' as navbar %}
-{% set pageTitle = 'Gestione catalogo' %}
+{% set pageTitle = 'Gestione ordini' %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="/common/js/hogan-3.0.2.min.js"></script>
 		<script type="text/javascript" src="/common/js/textile.min.js"></script>
 		<script type="text/javascript" src="/common/js/listmanager.js"></script>
-		<script type="text/javascript" src="{{ asset('bundles/chemlabcatalog/js/catalog.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('bundles/chemlabrequest/js/orders.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -22,7 +22,7 @@
 	<div class="container">
 		<h2>{{ pageTitle }}</h2>
         <nav id="mainPagination"></nav>
-        <button type="button" class="btn btn-primary" id="addItem" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi articolo</button>
+        <button type="button" class="btn btn-primary" id="addLocation" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi ordine</button>
         <div id="tableOutput"></div>
 	</div>
     <div id="entityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entityModalLabel" aria-hidden="true">
@@ -30,46 +30,42 @@
             <form class="modal-content" action="">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span><span class="sr-only">Chiudi</span></button>
-                    <h4 class="modal-title" id="entityModalLabel" data-edit-title="Modifica articolo" data-new-title="Aggiungi un articolo"></h4>
+                    <h4 class="modal-title" id="entityModalLabel" data-edit-title="Modifica ordine" data-new-title="Aggiungi un ordine"></h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label for="itemName" class="col-sm-3 control-label">Nome</label>
+                            <label for="orderItem" class="col-sm-3 control-label">Articolo</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="itemName" name="name" placeholder="Nome articolo" autofocus="autofocus" required="required" />
+                                <input type="number" class="form-control" id="orderItem" name="item" min="1" required="required"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="itemDescription" class="col-sm-3 control-label">Descrizione</label>
+                            <label for="orderQuantity" class="col-sm-3 control-label">Quantità</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="itemDescription" name="description" placeholder="Descrizione articolo" />
+                                <input type="number" class="form-control" id="orderQuantity" name="quantity" min="1" required="required"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="itemCode" class="col-sm-3 control-label">Codice</label>
+                            <label for="orderTotal" class="col-sm-3 control-label">Totale</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="itemCode" name="code" placeholder="Codice articolo" required="required" />
+                                <input type="number" class="form-control" id="orderTotal" name="total" min="0.01" step="0.01" required="required"/>
                             </div>
                         </div>
+{% if is_granted('ROLE_ADMIN') %}
                         <div class="form-group">
-                            <label for="itemType" class="col-sm-3 control-label">Tipo</label>
+                            <label for="orderStatus" class="col-sm-3 control-label">Stato</label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="itemType" name="type">
-                                    <option value="reagent">Reagente</option>
-                                    <option value="solvent">Solvente</option>
-                                    <option value="glassware">Vetreria</option>
-                                    <option value="equipment">Attrezzatura</option>
-                                    <option value="other">Altro</option>
+                                <select class="form-control" id="orderStatus" name="status">
+                                    <option value="issued">Richiesto</option>
+                                    <option value="approved">Approvato</option>
+                                    <option value="cencelled">Annullato</option>
+                                    <option value="working">In elaborazione</option>
+                                    <option value="complete">Completato</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="itemPrice" class="col-sm-3 control-label">Prezzo in &euro;</label>
-                            <div class="col-sm-9">
-                                <input type="number" class="form-control" id="itemPrice" name="price" min="0" step="0.01" required="required"/>
-                            </div>
-                        </div>
+{% endif %}
                     </div>
                     <div class="alert alert-danger hidden"></div>
                 </div>
@@ -86,12 +82,11 @@
     {% block entityCells %}
         {% verbatim %}
         <td class="item-head">
-            <a href="#" data-toggle="modal" data-target="#entityModal" data-entity-id="{{id}}">{{name}}</a>
-            {{{description}}}
+            <a href="#" data-toggle="modal" data-target="#entityModal" data-entity-id="{{id}}">{{item.name}}</a>
         </td>
-        <td>{{code}}</td>
-        <td>{{type}}</td>
-        <td class="text-right">{{price}}</td>
+        <td>{{user.name}} {{user.surname}}</td>
+        <td class="text-right">{{quantity}}</td>
+        <td class="text-right">{{total}}</td>
         {% endverbatim %}
     {% endblock %}
 {% endembed %}

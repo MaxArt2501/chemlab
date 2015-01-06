@@ -1,0 +1,20 @@
+chem_lab_inventory_homepage:
+    path:     /inventory
+    defaults: { _controller: ChemLabInventoryBundle:Default:index }
+
+chem_lab_inventory_rest:
+    path:         /inventory/entries/{id}
+    defaults:     { _controller: ChemLabInventoryBundle:Rest:rest }
+    methods:      [GET, POST, PUT, PATCH, DELETE]
+    requirements: { id: \d+ }
+
+chem_lab_inventory_list:
+    path:         /inventory/entries/{start}-{end}/{sort}
+    defaults:     
+        _controller: ChemLabInventoryBundle:Rest:list
+        sort:     
+    methods:      [GET]
+    requirements:
+        start:    \d+
+        end:      \d+
+        sort:     "[\+\-](?:id|item|location|quantity|notes)"

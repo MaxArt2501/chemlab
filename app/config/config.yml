@@ -34,6 +34,14 @@ twig:
             home:
                 desc:  Home
                 route: chem_lab_main_homepage
+            inventory:
+                desc:  Inventario
+                route: chem_lab_inventory_homepage
+                role:  ROLE_USER
+            request:
+                desc:  Ordini
+                route: chem_lab_request_homepage
+                role:  ROLE_USER
             catalog:
                 desc:  Catalogo
                 route: chem_lab_catalog_homepage

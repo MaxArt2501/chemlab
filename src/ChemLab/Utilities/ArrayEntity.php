@@ -2,10 +2,9 @@
 namespace ChemLab\Utilities;
 
 /**
- * Classe astratta per l'export delle proprietà di un oggetto in un named array,
- * e per l'import da un named array.
+ * Implementazione di default di ArrayEntityInterface
  */
-class ArrayEntity {
+class ArrayEntity implements ArrayEntityInterface {
 
 	/**
 	 * Restituisce semplicemente tutte le proprietà pubbliche e protette
@@ -21,13 +20,11 @@ class ArrayEntity {
 	}
 
 	/**
-	 * Importa le proprietà da un named array. Inserisce solo i valori
-	 * di proprietà pubbliche o protette (per altro, si veda su).
+	 * Importa le proprietà da un named array.
 	 */
 	public function fromArray(array $array) {
-		$props = get_object_vars($this);
 		foreach ($array as $key => $value)
-			if (array_key_exists($key, $props))
+			if (property_exists($this, $key))
 				$this->{$key} = $value;
 	}
 

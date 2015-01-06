@@ -16,16 +16,6 @@
 		<script type="text/javascript" src="{{ asset('bundles/chemlablocation/js/location.js') }}"></script>
 {% endblock %}
 
-{% block entityCells %}
-    {% verbatim %}
-    <td class="item-head">
-        <a href="#" data-toggle="modal" data-target="#entityModal" data-entity-id="{{id}}">{{name}}</a>
-    </td>
-    <td>{{position}}</td>
-    <td class="text-right">{{capacity}}</td>
-    {% endverbatim %}
-{% endblock %}
-
 {% block body %}
 	{{ navbar.draw() }}
 	<div class="container">

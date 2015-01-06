@@ -5,6 +5,7 @@ namespace ChemLab\AccountBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use ChemLab\RequestBundle\Entity\Order;
 
 /**
  * User
@@ -85,8 +86,16 @@ class User implements AdvancedUserInterface, \Serializable {
      */
     protected $active;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ChemLab\RequestBundle\Entity\Order", mappedBy="owner")
+     */
+    protected $orders;
+
     public function __construct() {
         $this->active = true;
+		$this->orders = new ArrayCollection();
     }
 
     /**
@@ -315,4 +324,37 @@ class User implements AdvancedUserInterface, \Serializable {
             $this->password
         ) = unserialize($raw);
 	}
+
+    /**
+     * Add orders
+     *
+     * @param \ChemLab\RequestBundle\Entity\Order $orders
+     * @return User
+     */
+    public function addOrder(Order $orders)
+    {
+        $this->orders[] = $orders;
+
+        return $this;
+    }
+
+    /**
+     * Remove orders
+     *
+     * @param \ChemLab\RequestBundle\Entity\Order $orders
+     */
+    public function removeOrder(Order $orders)
+    {
+        $this->orders->removeElement($orders);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
 }

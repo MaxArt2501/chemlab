@@ -1,0 +1,20 @@
+chem_lab_request_homepage:
+    path:     /request
+    defaults: { _controller: ChemLabRequestBundle:Default:index }
+
+chem_lab_request_rest:
+    path:         /request/orders/{id}
+    defaults:     { _controller: ChemLabRequestBundle:Rest:rest }
+    methods:      [GET, POST, PUT, PATCH, DELETE]
+    requirements: { id: \d+ }
+
+chem_lab_request_list:
+    path:         /request/orders/{start}-{end}/{sort}
+    defaults:     
+        _controller: ChemLabRequestBundle:Rest:list
+        sort:     
+    methods:      [GET]
+    requirements:
+        start:    \d+
+        end:      \d+
+        sort:     "[\+\-](?:id|item|owner|quantity|total|status)"

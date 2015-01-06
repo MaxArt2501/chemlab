@@ -8,16 +8,6 @@
  * @property {number} price        Prezzo unitario dell'articolo
  */
 
-(function() {
-
-var typeMap = {
-		reagent: "Reagente",
-		solvent: "Solvente",
-		glassware: "Vetreria",
-		equipment: "Attrezzatura",
-		other: "Altro"
-	}
-
 ListManager.init({
 	url: "/catalog/items/",
 	tableHeaders: {
@@ -33,16 +23,24 @@ ListManager.init({
 		type: "other",
 		price: 0
 	},
-	entityMapper: function(item) {
-		return {
-			id: item.id,
-			name: item.name,
-			code: item.code,
-			type: typeMap[item.type] || "Altro",
-			price: item.price.toFixed(2),
-			description: textile.convert(item.description)
+	entityMapper: (function() {
+		var typeMap = {
+			reagent: "Reagente",
+			solvent: "Solvente",
+			glassware: "Vetreria",
+			equipment: "Attrezzatura",
+			other: "Altro"
 		};
-	}
-});
 
-})();
+		return function(item) {
+			return {
+				id: item.id,
+				name: item.name,
+				code: item.code,
+				type: typeMap[item.type] || "Altro",
+				price: item.price.toFixed(2),
+				description: textile.convert(item.description)
+			};
+		};
+	})()
+});

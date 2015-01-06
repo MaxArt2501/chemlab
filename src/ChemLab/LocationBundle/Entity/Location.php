@@ -5,6 +5,7 @@ namespace ChemLab\LocationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\Utilities\ArrayEntity;
+use ChemLab\InventoryBundle\Entity\Entry;
 
 /**
  * Location
@@ -52,6 +53,16 @@ class Location extends ArrayEntity {
      */
     protected $notes;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ChemLab\InventoryBundle\Entity\Entry", mappedBy="location")
+     */
+    protected $entries;
+
+	public function __construct() {
+		$this->entries = new ArrayCollection();
+	}
 
     /**
      * Get id
@@ -154,4 +165,45 @@ class Location extends ArrayEntity {
     {
         return $this->notes;
     }
+
+    /**
+     * Add entries
+     *
+     * @param \ChemLab\InventoryBundle\Entity\Entry $entries
+     * @return Location
+     */
+    public function addEntry(Entry $entries)
+    {
+        $this->entries[] = $entries;
+
+        return $this;
+    }
+
+    /**
+     * Remove entries
+     *
+     * @param \ChemLab\InventoryBundle\Entity\Entry $entries
+     */
+    public function removeEntry(Entry $entries)
+    {
+        $this->entries->removeElement($entries);
+    }
+
+    /**
+     * Get entries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+	public function toArray() {
+		$out = array();
+		foreach ([ 'id', 'name', 'position', 'capacity', 'notes' ] as $prop)
+			$out[$prop] = $this->{$prop};
+
+		return $out;
+	}
 }
