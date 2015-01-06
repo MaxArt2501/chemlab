@@ -4,7 +4,7 @@ chem_lab_catalog_homepage:
 
 chem_lab_catalog_rest:
     path:         /catalog/items/{id}
-    defaults:     { _controller: ChemLabCatalogBundle:Rest:main }
+    defaults:     { _controller: ChemLabCatalogBundle:Rest:rest }
     methods:      [GET, POST, PUT, PATCH, DELETE]
     requirements: { id: \d+ }
 

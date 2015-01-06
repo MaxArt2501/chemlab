@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new ChemLab\MainBundle\ChemLabMainBundle(),
             new ChemLab\AccountBundle\ChemLabAccountBundle(),
             new ChemLab\CatalogBundle\ChemLabCatalogBundle(),
+            new ChemLab\LocationBundle\ChemLabLocationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

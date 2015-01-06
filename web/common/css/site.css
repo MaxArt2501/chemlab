@@ -6321,6 +6321,7 @@ body {
   bottom: 0;
   background: rgba(0, 0, 0, 0.05);
   font-size: 96px;
+  z-index: 2000;
 }
 .global-spinner:before,
 .global-spinner:after {
@@ -6368,4 +6369,8 @@ body {
 .modal.show-error .alert-danger {
   display: block !important;
   visibility: visible !important;
+}
+.form-group .alert {
+  margin: 5px 0 0;
+  padding: 7px;
 }

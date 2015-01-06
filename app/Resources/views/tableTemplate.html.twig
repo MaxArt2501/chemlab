@@ -1,0 +1,31 @@
+    <script type="text/html" data-template-name="table">
+        {% verbatim %}
+        {{#hasEntities}}
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                {{#headers}}
+                    <th{{#sorted}} class="sort-{{sorted}}"{{/sorted}}><a href="#{{page}}/{{sorting}}">{{text}}</a></th>
+                {{/headers}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#entities}}
+                <tr>
+        {% endverbatim %}
+            {% block entityCells %}
+                {% verbatim %}
+                    <td class="item-head">
+                        <a href="#" data-toggle="modal" data-target="#entityModal" data-entity-id="{{id}}">{{name}}</a>
+                    </td>
+                {% endverbatim %}
+            {% endblock %}
+        {% verbatim %}
+                </tr>
+                {{/entities}}
+            </tbody>
+        </table>
+        {{/hasEntities}}
+        {{^hasEntities}}<em>Nessun oggetto in elenco</em>{{/hasEntities}}
+        {% endverbatim %}
+    </script>

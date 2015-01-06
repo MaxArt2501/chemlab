@@ -1,3 +1,7 @@
+chem_lab_location:
+    resource: "@ChemLabLocationBundle/Resources/config/routing.yml"
+    prefix:   /
+
 chem_lab_catalog:
     resource: "@ChemLabCatalogBundle/Resources/config/routing.yml"
     prefix:   /

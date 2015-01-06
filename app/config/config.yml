@@ -38,6 +38,10 @@ twig:
                 desc:  Catalogo
                 route: chem_lab_catalog_homepage
                 role:  ROLE_ADMIN
+            locations:
+                desc:  Locazioni
+                route: chem_lab_location_homepage
+                role:  ROLE_ADMIN
 
 # Assetic Configuration
 assetic:

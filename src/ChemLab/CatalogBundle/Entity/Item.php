@@ -4,6 +4,7 @@ namespace ChemLab\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use ChemLab\Utilities\ArrayEntity;
 
 /**
  * Item
@@ -11,8 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Item
-{
+class Item extends ArrayEntity {
     /**
      * @var integer
      *
@@ -20,7 +20,7 @@ class Item
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -28,14 +28,14 @@ class Item
      * @ORM\Column(name="name", type="string", length=80)
      * @Assert\NotBlank(message = "Il nome dell'articolo non può essere vuoto")
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=1023)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
@@ -43,7 +43,7 @@ class Item
      * @ORM\Column(name="code", type="string", length=24)
      * @Assert\NotBlank(message = "Il codice dell'articolo non può essere vuoto")
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
@@ -51,7 +51,7 @@ class Item
      * @ORM\Column(name="type", type="string", length=24)
      * @Assert\Choice(choices = {"solvent", "reagent", "glassware", "equipment", "other"}, message = "Scegliere un tipo valido")
      */
-    private $type;
+    protected $type;
 
     /**
      * @var float
@@ -59,7 +59,7 @@ class Item
      * @ORM\Column(name="price", type="float")
      * @Assert\GreaterThanOrEqual(value=0, message="Inserire un valore non negativo")
      */
-    private $price;
+    protected $price;
 
 
     /**
@@ -187,19 +187,4 @@ class Item
         return $this->type;
     }
 
-	/**
-	 * Restituisce un array delle proprietà dell'oggetto Item
-	 * 
-	 * @return array
-	 */
-	public function toArray() {
-		return array(
-			'id' => $this->getId(),
-			'name' => $this->getName(),
-			'description' => $this->getDescription(),
-			'code' => $this->getCode(),
-			'type' => $this->getType(),
-			'price' => $this->getPrice()
-		);
-	}
 }

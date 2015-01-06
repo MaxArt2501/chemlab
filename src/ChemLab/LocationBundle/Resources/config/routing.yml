@@ -1,0 +1,20 @@
+chem_lab_location_homepage:
+    path:     /locations
+    defaults: { _controller: ChemLabLocationBundle:Default:index }
+
+chem_lab_location_rest:
+    path:         /locations/locs/{id}
+    defaults:     { _controller: ChemLabLocationBundle:Rest:rest }
+    methods:      [GET, POST, PUT, PATCH, DELETE]
+    requirements: { id: \d+ }
+
+chem_lab_location_list:
+    path:         /locations/locs/{start}-{end}/{sort}
+    defaults:     
+        _controller: ChemLabLocationBundle:Rest:list
+        sort:     
+    methods:      [GET]
+    requirements:
+        start:    \d+
+        end:      \d+
+        sort:     "[\+\-](?:id|name|position|capacity|notes)"
