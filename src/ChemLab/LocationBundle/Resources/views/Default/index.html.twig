@@ -70,6 +70,11 @@
 
 {% include '::commonTemplates.html.twig' %}
 {% embed '::tableTemplate.html.twig' %}
+    {% set tableHeaders = [
+        { 'sortBy': 'item', 'text': 'Articolo' },
+        { 'sortBy': 'position', 'text': 'Posizione' },
+        { 'sortBy': 'capacity', 'text': 'Capacità' }
+    ] %}
     {% block entityCells %}
         {% verbatim %}
         <td class="item-head">

@@ -1,18 +1,20 @@
     <script type="text/html" data-template-name="table">
-        {% verbatim %}
-        {{#hasEntities}}
+        {{ '{{#hasEntities}}' }}
         <table class='table table-striped'>
             <thead>
                 <tr>
-                {{#headers}}
-                    <th{{#sorted}} class="sort-{{sorted}}"{{/sorted}}><a href="#{{page}}/{{sorting}}">{{text}}</a></th>
-                {{/headers}}
+                {%- for header in tableHeaders %}
+                    {% if header.sortBy is defined %}
+                    <th><a data-sort-by="{{ header.sortBy }}">{{ header.text}}</a></th>
+                    {% else %}
+                    <th{% if header.align is defined %} class="text-{{ header.align }}"{% endif %}>{{ header.text }}</th>
+                    {% endif %}
+                {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {{#entities}}
+                {{ '{{#entities}}' }}
                 <tr>
-        {% endverbatim %}
             {% block entityCells %}
                 {% verbatim %}
                     <td class="item-head">

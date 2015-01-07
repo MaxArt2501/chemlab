@@ -14,7 +14,7 @@ use ChemLab\AccountBundle\Entity\User;
  * @ORM\Table(name="reqorder")
  * @ORM\Entity
  */
-class Order {
+class Order extends ArrayEntity {
     /**
      * @var integer
      *
@@ -61,6 +61,14 @@ class Order {
      * @Assert\Choice(choices = {"issued", "approved", "cancelled", "working", "complete"}, message = "Scegliere uno stato valido valido")
      */
     protected $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="datetime", type="datetime")
+     * @Assert\NotBlank(message = "Inserire data/ora valide")
+     */
+    protected $datetime;
 
 
     /**
@@ -187,4 +195,39 @@ class Order {
     {
         return $this->owner;
     }
+
+    /**
+     * Set datetime
+     *
+     * @param \DateTime $datetime
+     * @return Order
+     */
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+
+        return $this;
+    }
+
+    /**
+     * Get datetime
+     *
+     * @return \DateTime 
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
+    }
+
+	public function toArray() {
+		return array(
+			'id' => $this->id,
+			'item' => $this->item->toArray(),
+			'owner' => $this->owner->toArray(),
+			'quantity' => $this->quantity,
+			'total' => $this->total,
+			'status' => $this->status,
+			'datetime' => empty($this->datetime) ? null : $this->datetime->format('c')
+		);
+	}
 }

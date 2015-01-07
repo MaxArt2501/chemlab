@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\RequestBundle\Entity\Order;
+use ChemLab\Utilities\ArrayEntityInterface;
 
 /**
  * User
@@ -13,7 +14,7 @@ use ChemLab\RequestBundle\Entity\Order;
  * @ORM\Table(name="appuser")
  * @ORM\Entity
  */
-class User implements AdvancedUserInterface, \Serializable {
+class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface {
     /**
      * @var integer
      *
@@ -357,4 +358,16 @@ class User implements AdvancedUserInterface, \Serializable {
     {
         return $this->orders;
     }
+
+	public function toArray() {
+		$vars = get_object_vars($this);
+		unset($vars['orders']);
+		return $vars;
+	}
+	public function fromArray(array $array) {
+		foreach ($array as $key => $value)
+			if (in_array($key, [ 'id', 'username', 'password', 'name', 'surname', 'email', 'gender', 'admin', 'active' ]))
+				$this->{$key} = $value;
+	}
+
 }

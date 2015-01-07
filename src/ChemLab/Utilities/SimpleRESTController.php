@@ -47,7 +47,13 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 					}
 				}
 
-				$entity->fromArray($this->parseInput($input));
+				$parsed = $this->parseInput($input);
+				if (is_null($parsed)) {
+					$retobj = array( 'error' => 'Azione non consentita' );
+					break;
+				}
+
+				$entity->fromArray($parsed);
 				$validator = $this->get('validator');
 				$errors = $validator->validate($entity);
 
@@ -99,21 +105,64 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 
 		$repo = $this->getDoctrine()->getRepository($this->repository);
 		$qb = $repo->createQueryBuilder('i')
+				// Si limitano i risultati
 				->setFirstResult($start)
 				->setMaxResults($end - $start + 1);
+
+		// Impostazione filtri
+		if ($request->query->count()) {
+			$filters = [];
+			$meta = $this->getDoctrine()->getManager()->getClassMetadata($this->repository);
+
+			// Si scorrono i campi della query string, usando solo quelli validi (cioè quelli
+			// effettivamente definiti sull'entità, anche con chiavi esterne)
+			foreach ($request->query->all() as $key => $value) {
+
+				// Si verifica che la chiave si un campo "regolare"
+				if (array_key_exists($key, $meta->fieldMappings)) {
+
+					$type = $meta->fieldMappings[$key]['type'];
+					if (in_array($type, ['boolean', 'integer', 'smallint', 'bigint', 'datetime', 'datetimetz', 'date', 'time', 'decimal', 'float']))
+						$filters[] = $qb->expr()->eq("i.$key", $value);
+					elseif (in_array($type, ['string', 'text']))
+						$filters[] = $qb->expr()->like("i.$key", $qb->expr()->literal("$value%"));
+
+				// Si verifica che la chiave sia un campo con chiave esterna
+				} elseif (array_key_exists($key, $meta->associationMappings)
+						&& is_null($meta->associationMappings[$key]['mappedBy'])
+						&& is_integer($value)) {
+
+					$filters[] = $qb->expr()->eq("i.$key", $value);
+
+				}
+			}
+			// Se sono stati definiti filtri validi, si imposta la condizione where
+			if (!empty($filters)) {
+				// Se ci sono più filtri, li si mette in un'unica condizione and
+				if (count($filters) > 1) {
+					$expr = $qb->expr();
+					$filter = call_user_func_array([ $expr, 'andX' ], $filters);
+				} else $filter = $filters[0];
+				$qb->where($filter);
+			}
+		}
+
+		// Si imposta l'eventuale ordinamento
 		if (!empty($sort))
 			$qb->orderBy('i.'.substr($sort, 1), $sort[0] === '+' ? 'ASC' : 'DESC');
-		$query = $qb->getQuery();
 
-		$items = $query->getResult();
+		$query = $qb->getQuery();
+		$entities = $query->getResult();
 
 		$list = array();
-		foreach ($items as $item)
-			$list[] = $item->toArray();
+		foreach ($entities as $entity)
+			$list[] = $entity->toArray();
 
-		$qb = $repo->createQueryBuilder('i');
-		$query = $qb->select($qb->expr()->count('i.id'))->getQuery();
-		$total = $query->getSingleResult();
+		$qb = $repo->createQueryBuilder('i')
+				->select($qb->expr()->count('i.id'));
+		if (isset($filter))
+			$qb->where($filter);
+		$total = $qb->getQuery()->getSingleResult();
 
 		$response->setContent(json_encode(array(
 			'list' => $list,
@@ -124,7 +173,7 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 	}
 
 	/**
-	 * @param string $id  ID dell'oggetto Item da trovare. Se null crea una nuova istanza dell'oggetto
+	 * @param string $id  ID dell'entità da trovare. Se null crea una nuova istanza dell'oggetto
 	 * @return mixed
 	 */
 	protected function getEntity($id = null) {

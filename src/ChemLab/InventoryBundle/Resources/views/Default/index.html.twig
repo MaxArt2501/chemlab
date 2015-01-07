@@ -75,6 +75,11 @@
 
 {% include '::commonTemplates.html.twig' %}
 {% embed '::tableTemplate.html.twig' %}
+    {% set tableHeaders = [
+        { 'sortBy': 'item', 'text': 'Oggetto' },
+        { 'sortBy': 'location', 'text': 'Locazione' },
+        { 'sortBy': 'quantity', 'text': 'Quantità' }
+    ] %}
     {% block entityCells %}
         {% verbatim %}
         <td class="item-head">

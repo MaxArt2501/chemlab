@@ -19,5 +19,6 @@ ListManager.init({
 		position: "",
 		capacity: 0,
 		notes: ""
-	}
+	},
+	sortFields: [ "id", "name", "position", "capacity", "notes" ]
 });

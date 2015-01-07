@@ -3,8 +3,6 @@
 namespace ChemLab\RequestBundle\Controller;
 
 use ChemLab\Utilities\SimpleRESTController;
-use ChemLab\CatalogBundle\Entity\Item;
-use ChemLab\AccountBundle\Entity\User;
 
 class RestController extends SimpleRESTController {
 
@@ -13,19 +11,22 @@ class RestController extends SimpleRESTController {
 	}
 
 	protected function parseInput(array $input) {
-		foreach ($input as $key => $value) {
-			if (is_integer($value)) {
-				if ($key === 'item') {
-					$input['item'] = $this->getDoctrine()
-							->getRepository('ChemLabCatalogBundle:Item')
-							->find($value);
-				} elseif ($key === 'owner') {
-					$input['owner'] = $this->getDoctrine()
-							->getRepository('ChemLabAccountBundle:User')
-							->find($value);
-				}
+		if ($this->getRequest()->getMethod() === \Symfony\Component\HttpFoundation\Request::METHOD_POST) {
+			$input['owner'] = $this->getUser();
+			$input['status'] = 'issued';
+			if (is_numeric(@$input['item'])) {
+				$input['item'] = $this->getDoctrine()
+						->getRepository('ChemLabCatalogBundle:Item')
+						->find(intval($input['item']));
 			}
+		} else {
+			if (!$this->get('security.context')->isGranted('ROLE_ADMIN'))
+				return null;
+
+			if (array_keys($input) !== [ 'status' ])
+				return null;
 		}
+		$input['datetime'] = new \DateTime();
 
 		return $input;
 	}

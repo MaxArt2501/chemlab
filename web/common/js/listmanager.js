@@ -19,7 +19,8 @@
 			pagesAround: 1,
 			tableHeaders: { name: "Nome" },
 			entityMapper: function(x) { return x; },
-			entity: { name: "" }
+			entity: { name: "" },
+			sortFields: [ "id", "name" ]
 		},
 
 		/**
@@ -28,8 +29,13 @@
 		 */
 		templates: {},
 
+		/**
+		 * Funzione di inizializzazione del gestore della lista
+		 * @param {object.<string, *>} options
+		 */
 		init: function(options) {
 			this.options = $.extend({}, this.defaults, options);
+			sortRE = new RegExp("^[+\\-]?(?:" + this.options.sortFields.join("|") + ")$", "i");
 
 			$(function() {
 				$(window).on("hashchange", hashchange);
@@ -37,7 +43,24 @@
 			});
 		},
 
-		
+		setPage: function(page) {
+			page = +page;
+			if (page === currentPage, page < 0 || page !== Math.floor(page)) return;
+
+			var hash = location.hash ? location.hash.substring(1).split("/") : [];
+			hash[0] = page;
+			location.href = "#" + hash.join("/");
+		},
+
+		setSort: function(sort) {
+			if (sort === currentSort || !sortRE.test(sort)) return;
+
+			var hash = location.hash ? location.hash.substring(1).split("/") : [];
+			if (!hash[0]) hash[0] = 1;
+			hash[1] = sort;
+			location.href = "#" + hash.join("/");
+		},
+
 		/**
 		 * Mostra o nasconde uno spinner a tutta pagina
 		 * @param {?boolean} show
@@ -62,14 +85,18 @@
 
 		/**
 		 * Funzione di caricamento di una pagina di risultati
-		 * @param {number} page  Numero di pagina dei risultati da caricare
-		 * @param {string} sort  Tipo di ordinamento, formato [+-]colonna. Può essere blank
 		 * @returns {$.Deferred}
 		 */
-		loadTable: function loadTable(page, sort) {
+		loadTable: function() {
 			var opts = this.options,
-				templates = this.templates;
-			return $.getJSON(opts.url + (page - 1) * opts.entitiesPerPage + "-" + (page * opts.entitiesPerPage - 1) + (sort ? "/" + sort : ""))
+				templates = this.templates,
+				qstring = $.map(filters, function(value, key) {
+					return value == 0 ? null : encodeURIComponent(key) + "=" + encodeURIComponent(value);
+				}),
+				sort = currentSort ? "/" + currentSort : "";
+
+			return $.getJSON(opts.url + (currentPage - 1) * opts.entitiesPerPage + "-" + (currentPage * opts.entitiesPerPage - 1)
+					+ sort + (qstring.length ? "?" + qstring.join("&") : ""))
 				.then(function(json) {
 					if (json.error) {
 						$output.html(templates.alert.render({ type: "danger", message: "Errore di caricamento dati: " + json.error }));
@@ -82,43 +109,42 @@
 					var data = {
 						hasEntities: json.list.length,
 						entities: $.map(json.list, opts.entityMapper),
-						headers: $.map(opts.tableHeaders, function(header, key) {
-							var obj = { text: header, sorting: "+" + key };
-							if (sort && sort.substring(1) === key) {
-								var asc = sort[0] === "+";
-								obj.sorted = asc ? "ascending" : "descending";
-								obj.sorting = (asc ? "-" : "+") + key;
-							}
-							return obj;
-						}),
-						page: page
+						page: currentPage
 					};
 
 					// Elenco pagine per il template del paginatore
 					var pages = [],
 						totalPages = Math.ceil(json.total / opts.entitiesPerPage);
 					if (totalPages) {
-						if (page > 1) {
-							pages.push({ prev: page - 1 });
+						if (currentPage > 1) {
+							pages.push({ prev: currentPage - 1 });
 							pages.push({ page: 1 });
-							if (page > opts.pagesAround + 2)
+							if (currentPage > opts.pagesAround + 2)
 								pages.push({ skip: true });
-							for (var i = Math.max(2, page - opts.pagesAround); i < page; i++)
+							for (var i = Math.max(2, currentPage - opts.pagesAround); i < currentPage; i++)
 								pages.push({ page: i });
 						}
-						pages.push({ page: page, active: true });
-						if (page < totalPages) {
-							for (var i = Math.min(totalPages - page - 1, opts.pagesAround); i--;)
+						pages.push({ page: currentPage, active: true });
+						if (currentPage < totalPages) {
+							for (var i = Math.min(totalPages - currentPage - 1, opts.pagesAround); i--;)
 								pages.push({ page: totalPages - i - 1 });
-							if (page + opts.pagesAround + 1 < totalPages)
+							if (currentPage + opts.pagesAround + 1 < totalPages)
 								pages.push({ skip: true });
 							pages.push({ page: totalPages });
-							pages.push({ next: page + 1 });
+							pages.push({ next: currentPage + 1 });
 						}
 					}
 
-					$output.html(templates.table.render(data));
-					$pages.html(templates.paginator.render({ pages: pages, sorting: sort ? "/" + sort : "" }));
+					$output.html(templates.table.render(data))
+						.find("[data-sort-by]").each(function() {
+							var sortBy = this.getAttribute("data-sort-by");
+							if (currentSort && currentSort.substring(1) === sortBy) {
+								$(this).parent().addClass("sort-" + (currentSort[0] === "+" ? "ascending" : "descending"));
+								sortBy = (currentSort[0] === "+" ? "-" : "+") + sortBy;
+							}
+							this.setAttribute("href", "#" + currentPage + "/" + sortBy);
+						});
+					$pages.html(templates.paginator.render({ pages: pages, sorting: sort }));
 				}, function(xhr, status, message) {
 					$output.html(templates.alert.render({ type: "danger", message: "Errore di caricamento dati: " + xhr.status + " " + message }));
 					$pages.empty();
@@ -148,12 +174,40 @@
 		 * @type {jQuery}
 		 */
 		$modal,
+		/**
+		 * Riferimento al form dei filtri della lista
+		 * @type {jQuery}
+		 */
+		$filters,
+
+		/**
+		 * Espressione regolare di test per l'espressione di ordinamento
+		 * @type {RegExp}
+		 */
+		sortRE,
+
+		/**
+		 * Pagina corrente dell'elenco
+		 * @type {number}
+		 */
+		currentPage,
+		/**
+		 * Ordinamento corrente dell'elenco
+		 * @type {string}
+		 */
+		currentSort,
 
 		/**
 		 * Elenco di entità caricate
-		 * @type {Item[]}
+		 * @type {Entity[]}
 		 */
-		loadedEntities = [];
+		loadedEntities = [],
+
+		/**
+		 * Filtri impostati
+		 * @type {object.<string, string>}
+		 */
+		filters = {};
 
 	// Gestione del fragment dell'URL
 	function hashchange() {
@@ -168,9 +222,12 @@
 		}
 
 		if (hash[1]) {
-			if (/^[\+\-](?:id|name|description|code|type|price)$/i.test(hash[1])) {
+			if (sortRE.test(hash[1])) {
 				sort = hash[1].toLowerCase();
-				if (sort !== hash[1]) {
+				if ("+-".indexOf(sort[0]) === -1) {
+					hash[1] = (currentSort === "+" + sort  ? "-" : "+") + sort;
+					reload = true;
+				} else if (sort !== hash[1]) {
 					hash[1] = sort;
 					reload = true;
 				}
@@ -179,10 +236,14 @@
 				reload = true;
 			}
 		}
+		if (reload) {
+			location.href = "#" + hash.join("/");
+			return;
+		}
 
-		if (reload) location.replace("#" + hash.join("/"));
-		else if (tableKey !== page + sort)
-			ListManager.loadTable(page, sort);
+		currentPage = page;
+		currentSort = sort;
+		ListManager.loadTable();
 	}
 
 	$(function() {
@@ -190,6 +251,7 @@
 		$pages = $("#mainPagination");
 		$output = $("#tableOutput");
 		$modal = $("#entityModal");
+		$filters = $("#listFilters");
 
 		$("[data-template-name]").each(function() {
 			var name = this.getAttribute("data-template-name"),
@@ -202,6 +264,8 @@
 			function fillForm() {
 				$this.find(".alert-warning").remove();
 				$this.find(".has-error").removeClass("has-error");
+				$this.toggleClass("edit-entity", !!id)
+					.toggleClass("new-entity", !id);
 				if (entity.error) {
 					$this.addClass("show-error")
 						.find(".alert-danger").text("Impossibile caricare l'entità: " + entity.error);
@@ -210,10 +274,15 @@
 						.removeClass("show-error")
 						.find(".alert-danger").empty();
 					$.each(entity, function(key, value) {
-						$this.find("[name='" + key + "']").val(value);
+						var $field = $this.find("[name='" + key + "']");
+						if ($field.length) {
+							$field.val(value)
+								.prop("disabled", $field.hasClass("hide-if-" + (id ? "edit" : "new")));
+						}
 					});
 					$this.find(".form-control").first().focus();
 				}
+				$modal.trigger("entity.fill", [ id || 0, entity ]);
 			}
 
 			var $this = $(this),
@@ -253,7 +322,8 @@
 				id = $modal.data("entityId");
 
 			$this.find("[name]").each(function() {
-				data[this.name] = $(this).val();
+				if (!this.disabled)
+					data[this.name] = $(this).val();
 			});
 
 			ListManager.spinner(true);
@@ -279,11 +349,37 @@
 					} else {
 						$modal.modal("hide");
 						hashchange();
+						$modal.trigger("entity.saved", [ id || 0, data ]);
 					}
 				}, function(xhr, status, message) {
 					bootbox.alert("Operazione fallita: " + xhr.status + " " + message);
 					ListManager.spinner(false);
 				});
+		});
+
+		$filters.on("change", "select", function() {
+			filters[this.name] = $(this).val();
+			if (currentPage !== 1)
+				ListManager.setPage(1);
+			else ListManager.loadTable();
+		}).on("input keyup", "input", function() {
+			var $this = $(this);
+			clearTimeout($this.data("loadTimeout"));
+			$this.data("loadTimeout", setTimeout(function() {
+				filters[$this.prop("name")] = $this.val();
+				if (currentPage !== 1)
+					ListManager.setPage(1);
+				else ListManager.loadTable();
+			}, 750));
+		}).on("click", ".reset-field", function() {
+			var $field = $(this).prev("input");
+			if ($field.length) {
+				$field.val("");
+				filters[$field.prop("name")] = "";
+				if (currentPage !== 1)
+					ListManager.setPage(1);
+				else ListManager.loadTable();
+			}
 		});
 	});
 

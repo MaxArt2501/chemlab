@@ -9,11 +9,11 @@
 		<div class="container">
 			<div class="collapse navbar-collapse navbar-headernav-collapse">
 				<ul class="nav navbar-nav">
-				{% for key, item in main_navbar %}
-					{% if routeExists(item.route) and (not item.role is defined or is_granted(item.role)) %}
+				{%- for key, item in main_navbar -%}
+					{%- if routeExists(item.route) and (not item.role is defined or is_granted(item.role)) -%}
 					<li{% if item.route == current %} class="active"{% endif %}><a href="{{ path('' ~ item.route) }}">{{ item.desc }}</a></li>
-					{% endif %}
-				{% endfor %}
+					{%- endif -%}
+				{%- endfor -%}
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 				{% if app.user %}

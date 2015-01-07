@@ -261,7 +261,8 @@ th {
 .glyphicon,
 .table .sort-ascending:after,
 .table .sort-descending:after,
-.global-spinner {
+.global-spinner,
+.reset-field {
   position: relative;
   top: 1px;
   display: inline-block;
@@ -330,7 +331,8 @@ th {
 .glyphicon-ok:before {
   content: "\e013";
 }
-.glyphicon-remove:before {
+.glyphicon-remove:before,
+.reset-field:before {
   content: "\e014";
 }
 .glyphicon-zoom-in:before {
@@ -6362,6 +6364,26 @@ body {
 #mainPagination > .pagination {
   margin: 0;
 }
+#listFilters {
+  margin: .25em 0;
+  overflow: hidden;
+}
+#listFilters:before {
+  content: "Filtri";
+  display: block;
+  font-weight: bold;
+}
+.reset-field {
+  margin-right: -1.5em;
+  position: relative;
+  left: -1.5em;
+  vertical-align: -0.2em;
+  color: gray;
+  cursor: pointer;
+}
+.reset-field:hover {
+  color: inherit;
+}
 .modal.show-error [type=submit],
 .modal.show-error .form-horizontal {
   display: none;
@@ -6373,4 +6395,8 @@ body {
 .form-group .alert {
   margin: 5px 0 0;
   padding: 7px;
+}
+.new-entity .hide-if-new,
+.edit-entity .hide-if-edit {
+  display: none !important;
 }

@@ -23,6 +23,20 @@
 		<h2>{{ pageTitle }}</h2>
         <nav id="mainPagination"></nav>
         <button type="button" class="btn btn-primary" id="addLocation" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi ordine</button>
+        <form id="listFilters" class="form-inline">
+            <div class="form-group col-lg-4 col-md-6">
+                <label>Stato
+                    <select class="form-control" id="filterStatus" name="status">
+                        <option></option>
+                        <option value="issued">Richiesto</option>
+                        <option value="approved">Approvato</option>
+                        <option value="cencelled">Annullato</option>
+                        <option value="working">In elaborazione</option>
+                        <option value="complete">Completato</option>
+                    </select>
+                </label>
+            </div>
+        </form>
         <div id="tableOutput"></div>
 	</div>
     <div id="entityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entityModalLabel" aria-hidden="true">
@@ -35,21 +49,34 @@
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">Richiedente</label>
+                            <div class="col-sm-9" data-default-owner="{{ app.user.name }} {{ app.user.surname }}" id="orderOwner"></div>
+                        </div>
+                        <div class="form-group">
                             <label for="orderItem" class="col-sm-3 control-label">Articolo</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="orderItem" name="item" min="1" required="required"/>
+                                <select class="form-control hide-if-edit" id="orderItem" name="item">
+                                    {%- for item in items -%}
+                                    <option value="{{ item.id }}" data-item-price="{{ item.price }}" data-item-description="{{ item.description }}">{{ item.name }}</option>
+                                    {%- endfor -%}
+                                </select>
+                                <div class="hide-if-new" id="orderItemEditName"></div>
+                                <div id="orderItemDescription"></div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label for="orderQuantity" class="col-sm-3 control-label">Quantità</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="orderQuantity" name="quantity" min="1" required="required"/>
+                                <input type="number" class="form-control hide-if-edit" id="orderQuantity" name="quantity" min="1" required="required"/>
+                                <span class="hide-if-edit blocked-output"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="orderTotal" class="col-sm-3 control-label">Totale</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="orderTotal" name="total" min="0.01" step="0.01" required="required"/>
+                                <input type="number" class="form-control hide-if-edit" id="orderTotal" name="total" min="0.01" step="0.01" required="required"/>
+                                <span class="hide-if-edit blocked-output"></span>
                             </div>
                         </div>
 {% if is_granted('ROLE_ADMIN') %}
@@ -76,17 +103,61 @@
             </form>
         </div>
     </div>
+{% if is_granted('ROLE_ADMIN') %}
+    <div id="tranferModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tranferModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" action="">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span><span class="sr-only">Chiudi</span></button>
+                    <h4 class="modal-title" id="transferModalLabel">Trasferimento ordine</h4>
+                </div>
+                <div class="modal-body">
+                    <p>L'ordine è stato registrato come completato. Se si vuole, si può aggiornare l'inventario con</p>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="orderItem" class="col-sm-3 control-label">Locazione</label>
+                            <div class="col-sm-9">
+                                <select class="form-control hide-if-edit" id="orderItem" name="item">
+                                    <option value=""></option>
+                                    {%- for loc in locations -%}
+                                    <option value="{{ loc.id }}">{{ loc.name }}</option>
+                                    {%- endfor -%}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger hidden"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
+                    <button type="submit" class="btn btn-primary">Trasferisci</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endif %}
 
 {% include '::commonTemplates.html.twig' %}
+
 {% embed '::tableTemplate.html.twig' %}
+    {% set tableHeaders = [
+        { 'sortBy': 'item', 'text': 'Articolo' },
+        { 'sortBy': 'owner', 'text': 'Richiedente' },
+        { 'sortBy': 'quantity', 'text': 'Quantità' },
+        { 'sortBy': 'total', 'text': 'Totale €' },
+        { 'sortBy': 'datetime', 'text': 'Ultimo agg.' },
+        { 'sortBy': 'status', 'text': 'Stato' }
+    ] %}
     {% block entityCells %}
         {% verbatim %}
         <td class="item-head">
             <a href="#" data-toggle="modal" data-target="#entityModal" data-entity-id="{{id}}">{{item.name}}</a>
         </td>
-        <td>{{user.name}} {{user.surname}}</td>
-        <td class="text-right">{{quantity}}</td>
+        <td>{{owner.name}} {{owner.surname}}</td>
+        <td>{{quantity}}</td>
         <td class="text-right">{{total}}</td>
+        <td>{{datetime}}</td>
+        <td>{{status}}</td>
         {% endverbatim %}
     {% endblock %}
 {% endembed %}

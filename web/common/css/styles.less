@@ -79,6 +79,32 @@ body {
     }
 }
 
+#listFilters {
+    margin: .25em 0;
+    overflow: hidden;
+    &:before {
+        content: "Filtri";
+        display: block;
+        font-weight: bold;
+    }
+}
+.reset-field {
+    &:extend(.glyphicon);
+    margin-right: -1.5em;
+    position: relative;
+    left: -1.5em;
+    vertical-align: -.2em;
+    color: gray;
+    cursor: pointer;
+
+    &:before {
+        &:extend(.glyphicon-remove:before);
+    }
+    &:hover {
+        color: inherit;
+    }
+}
+
 .modal.show-error {
     [type=submit], .form-horizontal {
         display: none;
@@ -94,4 +120,8 @@ body {
         margin: floor(@line-height-computed / 4) 0 0;
         padding: floor(@alert-padding / 2);
     }
+}
+
+.new-entity .hide-if-new, .edit-entity .hide-if-edit {
+    display: none !important;
 }

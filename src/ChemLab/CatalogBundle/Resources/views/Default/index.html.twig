@@ -23,6 +23,28 @@
 		<h2>{{ pageTitle }}</h2>
         <nav id="mainPagination"></nav>
         <button type="button" class="btn btn-primary" id="addItem" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi articolo</button>
+        <form id="listFilters" class="form-inline">
+            <div class="form-group col-lg-4 col-md-6">
+                <label for="filterName">Nome</label>
+                <input type="text" class="form-control" name="name" id="filterName" /><span role="button" class="reset-field" title="Pulisci il campo"></span>
+            </div>
+            <div class="form-group col-lg-4 col-md-6">
+                <label for="filterCode">Codice</label>
+                <input type="text" class="form-control" name="code" id="filterCode" /><span role="button" class="reset-field" title="Pulisci il campo"></span>
+            </div>
+            <div class="form-group col-lg-4 col-md-6">
+                <label>Tipo
+                    <select class="form-control" id="filterType" name="type">
+                        <option></option>
+                        <option value="reagent">Reagente</option>
+                        <option value="solvent">Solvente</option>
+                        <option value="glassware">Vetreria</option>
+                        <option value="equipment">Attrezzatura</option>
+                        <option value="other">Altro</option>
+                    </select>
+                </label>
+            </div>
+        </form>
         <div id="tableOutput"></div>
 	</div>
     <div id="entityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entityModalLabel" aria-hidden="true">
@@ -83,6 +105,12 @@
 
 {% include '::commonTemplates.html.twig' %}
 {% embed '::tableTemplate.html.twig' %}
+    {% set tableHeaders = [
+        { 'sortBy': 'name', 'text': 'Articolo' },
+        { 'sortBy': 'code', 'text': 'Codice' },
+        { 'sortBy': 'type', 'text': 'Tipo' },
+        { 'sortBy': 'price', 'text': 'Prezzo in €' }
+    ] %}
     {% block entityCells %}
         {% verbatim %}
         <td class="item-head">
