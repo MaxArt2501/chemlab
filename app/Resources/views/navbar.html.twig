@@ -17,12 +17,12 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 				{% if app.user %}
-					<li><a href="{{ path('logout') }}" title="Effettua il logout">
-						<span class="glyphicon glyphicon-log-out"></span>
+					<li><a href="{{ path('chem_lab_account_profile') }}" title="Cambia il profilo personale">
+						<span class="glyphicon glyphicon-user"></span>
 						{{ app.user.name }} {{ app.user.surname }}
 					</a></li>
 				{% else %}
-					<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+					<li><a href="{{ path('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 				{% endif %}
 				</ul>
 			</div>

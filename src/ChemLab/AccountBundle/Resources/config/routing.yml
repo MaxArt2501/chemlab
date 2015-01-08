@@ -1,3 +1,3 @@
-chem_lab_account_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: ChemLabAccountBundle:Default:index }
+chem_lab_account_profile:
+    path:     /profile
+    defaults: { _controller: ChemLabAccountBundle:Default:profile }

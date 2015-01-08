@@ -12,15 +12,14 @@
 		root.ListManager = factory(root.jQuery, root.Hogan);
   }
 }(this, function($, Hogan) {
-
+"use strict";
 	var ListManager = {
 		defaults: {
 			entitiesPerPage: 10,
 			pagesAround: 1,
 			tableHeaders: { name: "Nome" },
 			entityMapper: function(x) { return x; },
-			entity: { name: "" },
-			sortFields: [ "id", "name" ]
+			entity: { name: "" }
 		},
 
 		/**
@@ -35,9 +34,12 @@
 		 */
 		init: function(options) {
 			this.options = $.extend({}, this.defaults, options);
-			sortRE = new RegExp("^[+\\-]?(?:" + this.options.sortFields.join("|") + ")$", "i");
 
 			$(function() {
+				var $ttempl = $("script[data-sort-fields]");
+				sortRE = $ttempl.length
+						? new RegExp("^[+\\-](?:" + $.trim($ttempl.attr("data-sort-fields")).replace(/\s+/g, "|") + ")$", "i")
+						: /^[+\-]id$/i;
 				$(window).on("hashchange", hashchange);
 				hashchange();
 			});
@@ -104,7 +106,7 @@
 						return;
 					}
 
-					loadedItems = json.list;
+					loadedEntities = json.list;
 					// Oggetto dati per il template della tabella
 					var data = {
 						hasEntities: json.list.length,
@@ -141,10 +143,11 @@
 							if (currentSort && currentSort.substring(1) === sortBy) {
 								$(this).parent().addClass("sort-" + (currentSort[0] === "+" ? "ascending" : "descending"));
 								sortBy = (currentSort[0] === "+" ? "-" : "+") + sortBy;
-							}
+							} else sortBy = "+" + sortBy;
 							this.setAttribute("href", "#" + currentPage + "/" + sortBy);
 						});
 					$pages.html(templates.paginator.render({ pages: pages, sorting: sort }));
+					$output.trigger("table.loaded", [ loadedEntities, currentPage, currentSort ]);
 				}, function(xhr, status, message) {
 					$output.html(templates.alert.render({ type: "danger", message: "Errore di caricamento dati: " + xhr.status + " " + message }));
 					$pages.empty();
@@ -224,10 +227,7 @@
 		if (hash[1]) {
 			if (sortRE.test(hash[1])) {
 				sort = hash[1].toLowerCase();
-				if ("+-".indexOf(sort[0]) === -1) {
-					hash[1] = (currentSort === "+" + sort  ? "-" : "+") + sort;
-					reload = true;
-				} else if (sort !== hash[1]) {
+				if (sort !== hash[1]) {
 					hash[1] = sort;
 					reload = true;
 				}
@@ -267,7 +267,8 @@
 				$this.toggleClass("edit-entity", !!id)
 					.toggleClass("new-entity", !id);
 				if (entity.error) {
-					$this.addClass("show-error")
+					$this.removeData("entity")
+						.addClass("show-error")
 						.find(".alert-danger").text("Impossibile caricare l'entità: " + entity.error);
 				} else {
 					$this.data("entityId", id || 0)
@@ -281,8 +282,9 @@
 						}
 					});
 					$this.find(".form-control").first().focus();
+					$this.data("entity", entity);
 				}
-				$modal.trigger("entity.fill", [ id || 0, entity ]);
+				$this.trigger("entity.fill", [ id || 0, entity ]);
 			}
 
 			var $this = $(this),
@@ -293,7 +295,7 @@
 
 			if (id && !isNaN(id)) {
 				title = "edit";
-				$.each(loadedItems, function(i, ent) {
+				$.each(loadedEntities, function(i, ent) {
 					if (ent.id === id) {
 						entity = ent;
 						return false;
@@ -319,7 +321,10 @@
 
 			var data = {},
 				$this = $(this),
+				entity = $modal.data("entity"),
 				id = $modal.data("entityId");
+
+			if (!entity) return;
 
 			$this.find("[name]").each(function() {
 				if (!this.disabled)
@@ -327,7 +332,7 @@
 			});
 
 			ListManager.spinner(true);
-			$.ajax({ url: ListManager.options.url + id, method: id ? "PATCH" : "POST", data: JSON.stringify(data), responseType: "json" })
+			$.ajax({ url: ListManager.options.url + id, method: id ? "PATCH" : "POST", data: JSON.stringify(data), dataType: "json" })
 				.then(function(json) {
 					if (json && json.error) {
 						ListManager.spinner(false);
@@ -335,7 +340,7 @@
 							$this.find(".alert-warning").remove();
 							$this.find(".has-error").removeClass("has-error");
 							$.each(json.fields, function(key, message) {
-								$field = $this.find("[name='" + key + "']");
+								var $field = $this.find("[name='" + key + "']");
 								if ($field.length) {
 									$field.parent().append(ListManager.templates.alert.render({ type: "warning", message: message }));
 									$field.closest(".form-group").addClass("has-error");
@@ -349,7 +354,7 @@
 					} else {
 						$modal.modal("hide");
 						hashchange();
-						$modal.trigger("entity.saved", [ id || 0, data ]);
+						$modal.trigger("entity.saved", [ id || 0, data, entity ]);
 					}
 				}, function(xhr, status, message) {
 					bootbox.alert("Operazione fallita: " + xhr.status + " " + message);

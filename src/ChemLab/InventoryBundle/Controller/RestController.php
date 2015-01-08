@@ -14,15 +14,15 @@ class RestController extends SimpleRESTController {
 
 	protected function parseInput(array $input) {
 		foreach ($input as $key => $value) {
-			if (is_integer($value)) {
+			if (is_numeric($value)) {
 				if ($key === 'item') {
 					$input['item'] = $this->getDoctrine()
 							->getRepository('ChemLabCatalogBundle:Item')
-							->find($value);
-				} elseif ($key === 'item') {
+							->find(intval($value));
+				} elseif ($key === 'location') {
 					$input['location'] = $this->getDoctrine()
 							->getRepository('ChemLabLocationBundle:Location')
-							->find($value);
+							->find(intval($value));
 				}
 			}
 		}

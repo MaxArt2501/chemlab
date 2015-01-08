@@ -1,6 +1,6 @@
-    <script type="text/html" data-template-name="table">
+    <script type="text/html" data-template-name="table" data-sort-fields="{% for header in tableHeaders %}{% if header.sortBy is defined %}{{ header.sortBy }} {% endif %}{% endfor %}">
         {{ '{{#hasEntities}}' }}
-        <table class='table table-striped'>
+        <table class="table table-striped">
             <thead>
                 <tr>
                 {%- for header in tableHeaders %}

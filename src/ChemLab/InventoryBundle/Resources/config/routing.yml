@@ -18,3 +18,10 @@ chem_lab_inventory_list:
         start:    \d+
         end:      \d+
         sort:     "[\+\-](?:id|item|location|quantity|notes)"
+
+chem_lab_inventory_add:
+    path:         /inventory/entries/transfer
+    defaults:     
+        _controller: ChemLabInventoryBundle:Default:transfer
+        sort:     
+    methods:      [POST]

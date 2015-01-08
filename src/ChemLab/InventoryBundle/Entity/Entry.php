@@ -22,9 +22,10 @@ class Entry extends ArrayEntity {
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
+     * @Assert\Type(type = "\ChemLab\CatalogBundle\Entity\Item", message = "Tipo articolo non valido")
      * @Assert\NotNull(message = "Indicare un articolo valido")
      * @ORM\ManyToOne(targetEntity="ChemLab\CatalogBundle\Entity\Item", inversedBy="entries")
      * @ORM\JoinColumn(name="item", referencedColumnName="id")
@@ -32,6 +33,7 @@ class Entry extends ArrayEntity {
     protected $item;
 
     /**
+     * @Assert\Type(type = "\ChemLab\LocationBundle\Entity\Location", message = "Tipo locazione non valido")
      * @Assert\NotNull(message = "Indicare una locazione valida")
      * @ORM\ManyToOne(targetEntity="ChemLab\LocationBundle\Entity\Location", inversedBy="entries")
      * @ORM\JoinColumn(name="location", referencedColumnName="id")
@@ -42,15 +44,16 @@ class Entry extends ArrayEntity {
      * @var integer
      *
      * @ORM\Column(name="quantity", type="integer")
+     * @Assert\GreaterThanOrEqual(value=0, message="Inserire un valore non negativo")
      */
-    private $quantity;
+    protected $quantity;
 
     /**
      * @var string
      *
      * @ORM\Column(name="notes", type="string", length=1023)
      */
-    private $notes;
+    protected $notes;
 
 
     /**

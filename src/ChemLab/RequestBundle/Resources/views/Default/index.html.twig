@@ -112,13 +112,12 @@
                     <h4 class="modal-title" id="transferModalLabel">Trasferimento ordine</h4>
                 </div>
                 <div class="modal-body">
-                    <p>L'ordine è stato registrato come completato. Se si vuole, si può aggiornare l'inventario con</p>
+                    <p>L'ordine è stato registrato come completato. Se si vuole, si può aggiornare l'inventario inserendo gli articoli ricevuti in una locazione a scelta:</p>
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label for="orderItem" class="col-sm-3 control-label">Locazione</label>
+                            <label for="entryLocation" class="col-sm-3 control-label">Locazione</label>
                             <div class="col-sm-9">
-                                <select class="form-control hide-if-edit" id="orderItem" name="item">
-                                    <option value=""></option>
+                                <select class="form-control" id="entryLocation" name="location">
                                     {%- for loc in locations -%}
                                     <option value="{{ loc.id }}">{{ loc.name }}</option>
                                     {%- endfor -%}

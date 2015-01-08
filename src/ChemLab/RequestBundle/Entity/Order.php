@@ -25,6 +25,7 @@ class Order extends ArrayEntity {
     protected $id;
 
     /**
+     * @Assert\Type(type = "\ChemLab\CatalogBundle\Entity\Item", message = "Tipo articolo non valido")
      * @Assert\NotNull(message = "Indicare un articolo valido")
      * @ORM\ManyToOne(targetEntity="ChemLab\CatalogBundle\Entity\Item", inversedBy="orders")
      * @ORM\JoinColumn(name="item", referencedColumnName="id")
@@ -32,6 +33,7 @@ class Order extends ArrayEntity {
     protected $item;
 
     /**
+     * @Assert\Type(type = "\ChemLab\AccountBundle\Entity\User", message = "Tipo utente non valido")
      * @Assert\NotNull(message = "Indicare un utente valido")
      * @ORM\ManyToOne(targetEntity="ChemLab\AccountBundle\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(name="owner", referencedColumnName="id")

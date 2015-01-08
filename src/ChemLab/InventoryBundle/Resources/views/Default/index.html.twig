@@ -22,7 +22,9 @@
 	<div class="container">
 		<h2>{{ pageTitle }}</h2>
         <nav id="mainPagination"></nav>
+{% if is_granted('ROLE_ADMIN') %}
         <button type="button" class="btn btn-primary" id="addLocation" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi oggetto</button>
+{% endif %}
         <div id="tableOutput"></div>
 	</div>
     <div id="entityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entityModalLabel" aria-hidden="true">
@@ -37,7 +39,12 @@
                         <div class="form-group">
                             <label for="entryItem" class="col-sm-3 control-label">Articolo</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" id="entryItem" name="item" min="1" required="required"/>
+                                <select class="form-control" id="entryItem" name="item">
+                                    {%- for item in items -%}
+                                    <option value="{{ item.id }}" data-item-description="{{ item.description }}">{{ item.name }}</option>
+                                    {%- endfor -%}
+                                </select>
+                                <div id="entryItemDescription"></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -45,9 +52,10 @@
                             <div class="col-sm-9">
                                 <select class="form-control" id="entryLocation" name="location" required="required">
                                     {% for loc in locations %}
-                                    <option value="{{ loc.id }}">{{ loc.name }}</option>
+                                    <option value="{{ loc.id }}" data-location-position="{{ loc.position }}">{{ loc.name }}</option>
                                     {% endfor %}
                                 </select>
+                                <div id="entryLocationPosition"></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -86,7 +94,7 @@
             <a href="#" data-toggle="modal" data-target="#entityModal" data-entity-id="{{id}}">{{item.name}}</a>
         </td>
         <td>{{location.name}}</td>
-        <td class="text-right">{{quantity}}</td>
+        <td>{{quantity}}</td>
         {% endverbatim %}
     {% endblock %}
 {% endembed %}

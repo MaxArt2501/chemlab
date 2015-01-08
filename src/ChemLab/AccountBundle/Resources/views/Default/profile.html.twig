@@ -1,0 +1,25 @@
+{% extends '::base.html.twig' %}
+{% import '::navbar.html.twig' as navbar %}
+{% set pageTitle = 'Profilo personale' %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block stylesheets %}
+		<link rel="stylesheet" href="/common/css/site.min.css"/>
+{% endblock %}
+{% block javascripts %}
+
+{% endblock %}
+
+{% block body %}
+	{{ navbar.draw() }}
+	<div class="container">
+		<h2>{{ pageTitle }}</h2>
+		<hr/>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        <h3><a href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></h3>
+	</div>
+{% endblock %}
