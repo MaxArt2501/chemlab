@@ -18,13 +18,6 @@ ListManager.init({
 		status: "issued"
 	},
 	entityMapper: (function() {
-		var statusMap = {
-				issued: "Richiesto",
-				approved: "Approvato",
-				cencelled: "Annullato",
-				working: "In elaborazione",
-				complete: "Completato"
-			};
 		return function(entity) {
 			var date = entity.datetime ? new Date(entity.datetime) : null;
 			date = date ? date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
@@ -35,13 +28,12 @@ ListManager.init({
 				item: entity.item,
 				owner: entity.owner,
 				quantity: entity.quantity,
-				total: entity.total.toFixed(2),
-				status: statusMap[entity.status],
+				total: entity.total.toFixed(2).replace(".", ","),
+				status: entity.status,
 				datetime: date
 			};
 		}
-	})(),
-	sortFields: [ "id", "item", "owner", "quantity", "total", "status" ]
+	})()
 });
 
 $(function() {

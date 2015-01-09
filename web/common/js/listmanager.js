@@ -266,24 +266,39 @@
 				$this.find(".has-error").removeClass("has-error");
 				$this.toggleClass("edit-entity", !!id)
 					.toggleClass("new-entity", !id);
+
 				if (entity.error) {
+
 					$this.removeData("entity")
 						.addClass("show-error")
 						.find(".alert-danger").text("Impossibile caricare l'entità: " + entity.error);
+
 				} else {
+
 					$this.data("entityId", id || 0)
 						.removeClass("show-error")
 						.find(".alert-danger").empty();
+
 					$.each(entity, function(key, value) {
-						var $field = $this.find("[name='" + key + "']");
+						var $field = $this.find("[name='" + key + "']"), type;
 						if ($field.length) {
-							$field.val(value)
-								.prop("disabled", $field.hasClass("hide-if-" + (id ? "edit" : "new")));
+
+							type = $field.prop("type");
+							if (type === "checkbox")
+								$field.prop("checked", value);
+							else if (type === "radio")
+								$field.filter("[value='" + value + "']").prop("checked", true);
+							else $field.val(value);
+
+							$field.prop("disabled", $field.hasClass("hide-if-" + (id ? "edit" : "new")));
 						}
 					});
+
 					$this.find(".form-control").first().focus();
 					$this.data("entity", entity);
+
 				}
+
 				$this.trigger("entity.fill", [ id || 0, entity ]);
 			}
 
@@ -327,8 +342,16 @@
 			if (!entity) return;
 
 			$this.find("[name]").each(function() {
-				if (!this.disabled)
-					data[this.name] = $(this).val();
+				if (this.disabled || this.name in data) return;
+
+				var value;
+				if (this.type === "checkbox")
+					value = this.checked;
+				else if (this.type === "radio")
+					value = $("input[type=radio][name='" + this.name + "']:checked", this.form).val();
+				else value = $(this).val();
+
+				data[this.name] = value;
 			});
 
 			ListManager.spinner(true);

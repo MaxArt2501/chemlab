@@ -50,6 +50,10 @@ twig:
                 desc:  Locazioni
                 route: chem_lab_location_homepage
                 role:  ROLE_ADMIN
+            access:
+                desc:  Utenti
+                route: chem_lab_account_homepage
+                role:  ROLE_ADMIN
 
 # Assetic Configuration
 assetic:

@@ -21,6 +21,7 @@ security:
         - { path: ^/orders, role: ROLE_USER }
         - { path: ^/catalog, role: ROLE_ADMIN }
         - { path: ^/locations, role: ROLE_ADMIN }
+        - { path: ^/access, role: ROLE_ADMIN }
 
     providers:
         main:

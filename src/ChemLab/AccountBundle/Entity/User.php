@@ -3,6 +3,7 @@
 namespace ChemLab\AccountBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\RequestBundle\Entity\Order;
@@ -361,6 +362,7 @@ class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface
 
 	public function toArray() {
 		$vars = get_object_vars($this);
+		unset($vars['password']);
 		unset($vars['orders']);
 		return $vars;
 	}

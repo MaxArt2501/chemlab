@@ -1,5 +1,13 @@
 body {
-	background: #f4edff url(/common/images/chemlab-bg.png) no-repeat 50px 0px;
+	background: @body-bg url(/common/images/chemlab-bg.png) no-repeat 50px 0px;
+}
+
+.jumbotron {
+    box-shadow: @jumbotron-shadow;
+}
+
+#loginForm {
+    margin-top: 2em;
 }
 
 .table {
@@ -124,4 +132,42 @@ body {
 
 .new-entity .hide-if-new, .edit-entity .hide-if-edit {
     display: none !important;
+}
+
+.order-status {
+    &:before {
+        &:extend(.glyphicon);
+    }
+    &.status-issued {
+        &:before { &:extend(.glyphicon-star-empty:before); }
+        &:after { content: " Richiesto"; }
+    }
+    &.status-approved {
+        &:before { &:extend(.glyphicon-thumbs-up:before); }
+        &:after { content: " Approvato"; }
+    }
+    &.status-cancelled {
+        &:before { &:extend(.glyphicon-remove:before); }
+        &:after { content: " Annullato"; }
+    }
+    &.status-working {
+        &:before { &:extend(.glyphicon-time:before); }
+        &:after { content: " In elab."; }
+    }
+    &.status-complete {
+        &:before { &:extend(.glyphicon-ok:before); }
+        &:after { content: " Completato"; }
+    }
+}
+
+li[data-section-name] {
+    > a:before {
+        &:extend(.glyphicon);
+    }
+    &[data-section-name="home"] > a:before { &:extend(.glyphicon-home:before); }
+    &[data-section-name="inventory"] > a:before { &:extend(.glyphicon-th:before); }
+    &[data-section-name="request"] > a:before { &:extend(.glyphicon-pencil:before); }
+    &[data-section-name="locations"] > a:before { &:extend(.glyphicon-map-marker:before); }
+    &[data-section-name="catalog"] > a:before { &:extend(.glyphicon-book:before); }
+    &[data-section-name="access"] > a:before { &:extend(.glyphicon-user:before); }
 }

@@ -262,7 +262,8 @@ th {
 .table .sort-ascending:after,
 .table .sort-descending:after,
 .global-spinner,
-.reset-field {
+.reset-field,
+.order-status:before {
   position: relative;
   top: 1px;
   display: inline-block;
@@ -310,7 +311,8 @@ th {
 .glyphicon-star:before {
   content: "\e006";
 }
-.glyphicon-star-empty:before {
+.glyphicon-star-empty:before,
+.order-status.status-issued:before {
   content: "\e007";
 }
 .glyphicon-user:before {
@@ -328,11 +330,13 @@ th {
 .glyphicon-th-list:before {
   content: "\e012";
 }
-.glyphicon-ok:before {
+.glyphicon-ok:before,
+.order-status.status-complete:before {
   content: "\e013";
 }
 .glyphicon-remove:before,
-.reset-field:before {
+.reset-field:before,
+.order-status.status-cancelled:before {
   content: "\e014";
 }
 .glyphicon-zoom-in:before {
@@ -361,7 +365,8 @@ th {
 .glyphicon-file:before {
   content: "\e022";
 }
-.glyphicon-time:before {
+.glyphicon-time:before,
+.order-status.status-workink:before {
   content: "\e023";
 }
 .glyphicon-road:before {
@@ -657,7 +662,8 @@ th {
 .glyphicon-certificate:before {
   content: "\e124";
 }
-.glyphicon-thumbs-up:before {
+.glyphicon-thumbs-up:before,
+.order-status.status-approved:before {
   content: "\e125";
 }
 .glyphicon-thumbs-down:before {
@@ -6399,4 +6405,19 @@ body {
 .new-entity .hide-if-new,
 .edit-entity .hide-if-edit {
   display: none !important;
+}
+.order-status.status-issued:after {
+  content: " Richiesto";
+}
+.order-status.status-approved:after {
+  content: " Approvato";
+}
+.order-status.status-cancelled:after {
+  content: " Annullato";
+}
+.order-status.status-workink:after {
+  content: " In elab.";
+}
+.order-status.status-complete:after {
+  content: " Completato";
 }

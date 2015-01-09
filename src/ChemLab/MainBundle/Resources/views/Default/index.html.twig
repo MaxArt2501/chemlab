@@ -8,21 +8,41 @@
 {% endblock %}
 {% block javascripts %}
 		<script type="text/javascript" src="/common/js/jquery-2.1.3.min.js"></script>
-		<script type="text/javascript" src="/common/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="/common/js/bootbox.min.js"></script>
+		<script type="text/javascript" src="/common/js/textile.min.js"></script>
+		<script type="text/javascript" src="{{ asset('bundles/chemlabmain/js/main.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 	{{ navbar.draw() }}
 	<div class="container">
-		<h2>ChemLab - gestore laboratorio</h2>
+		<h2 id="mainTitle">ChemLab - gestore laboratorio</h2>
 		<hr/>
         {% if app.user %}
-        <h3>Benvenut{% if app.user.gender == "F" %}a{% else %}o{% endif %}, {{ app.user.name }} {{ app.user.surname }}.</h3>
+        <h3 id="userWelcome">Benvenut{% if app.user.gender == "F" %}a{% else %}o{% endif %}, {{ app.user.name }} {{ app.user.surname }}.</h3>
         {% endif %}
-		I dati:
-		<pre>
-{{ data }}
-		</pre>
+        <h4>Ultimi ordini</h4>
+        {% if orders|length %}
+        <table class="table table-striped" id="lastOrders">
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>
+                        <strong>{{ order.datetime|date('j/n/Y G:i') }}</strong><br/>
+                        <em>{{ order.owner.name }} {{ order.owner.surname }}</em>
+                    </td>
+                    <td>
+                        <strong>{{ order.item.name }}</strong><br/>
+                        <em class="item-description">{{ order.item.description }}</em>
+                    </td>
+                    <td>{{ order.total|number_format(2, ',', ' ') }}&euro; ({{ order.quantity }} unità)</td>
+                    <td><span class="order-status status-{{ order.status }}"></span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <em id="lastOrders">Nessun ordine negli archivi</em>
+        {% endif %}
+        <!-- {{ data }} -->
 	</div>
 {% endblock %}

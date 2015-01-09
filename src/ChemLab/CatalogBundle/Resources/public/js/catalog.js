@@ -36,6 +36,5 @@ ListManager.init({
 				description: textile.convert(item.description)
 			};
 		};
-	})(),
-	sortFields: [ "id", "name", "code", "type", "price" ]
+	})()
 });

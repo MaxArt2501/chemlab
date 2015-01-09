@@ -22,10 +22,6 @@ chem_lab_main:
     resource: "@ChemLabMainBundle/Resources/config/routing.yml"
     prefix:   /
 
-# app:
-    # resource: @AppBundle/Controller/
-    # type:     annotation
-
 # Login col sistema classico di Symfony
 login:
     path:     /login

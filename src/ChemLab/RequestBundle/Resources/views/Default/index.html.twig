@@ -1,6 +1,13 @@
 {% extends '::base.html.twig' %}
 {% import '::navbar.html.twig' as navbar %}
 {% set pageTitle = 'Gestione ordini' %}
+{% set statusDef = {
+    'issued': 'Richiesto',
+    'approved': 'Approvato',
+    'cancelled': 'Annullato',
+    'working': 'In elaborazione',
+    'complete': 'Completato'
+} %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
@@ -28,11 +35,9 @@
                 <label>Stato
                     <select class="form-control" id="filterStatus" name="status">
                         <option></option>
-                        <option value="issued">Richiesto</option>
-                        <option value="approved">Approvato</option>
-                        <option value="cencelled">Annullato</option>
-                        <option value="working">In elaborazione</option>
-                        <option value="complete">Completato</option>
+{% for value, text in statusDef %}
+                        <option value="{{ value }}">{{ text }}</option>
+{% endfor %}
                     </select>
                 </label>
             </div>
@@ -84,11 +89,9 @@
                             <label for="orderStatus" class="col-sm-3 control-label">Stato</label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="orderStatus" name="status">
-                                    <option value="issued">Richiesto</option>
-                                    <option value="approved">Approvato</option>
-                                    <option value="cencelled">Annullato</option>
-                                    <option value="working">In elaborazione</option>
-                                    <option value="complete">Completato</option>
+{% for value, text in statusDef %}
+                                    <option value="{{ value }}">{{ text }}</option>
+{% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -156,7 +159,7 @@
         <td>{{quantity}}</td>
         <td class="text-right">{{total}}</td>
         <td>{{datetime}}</td>
-        <td>{{status}}</td>
+        <td><span class="order-status status-{{status}}"></span></td>
         {% endverbatim %}
     {% endblock %}
 {% endembed %}

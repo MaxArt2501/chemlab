@@ -3,6 +3,7 @@
 namespace ChemLab\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\Utilities\ArrayEntity;
 use ChemLab\InventoryBundle\Entity\Entry;

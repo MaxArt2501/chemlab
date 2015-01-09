@@ -1,3 +1,24 @@
+chem_lab_account_homepage:
+    path:     /access
+    defaults: { _controller: ChemLabAccountBundle:Default:index }
+
 chem_lab_account_profile:
     path:     /profile
     defaults: { _controller: ChemLabAccountBundle:Default:profile }
+
+chem_lab_account_rest:
+    path:         /access/users/{id}
+    defaults:     { _controller: ChemLabAccountBundle:Rest:rest }
+    methods:      [GET, POST, PUT, PATCH, DELETE]
+    requirements: { id: \d+ }
+
+chem_lab_account_list:
+    path:         /access/users/{start}-{end}/{sort}
+    defaults:     
+        _controller: ChemLabAccountBundle:Rest:list
+        sort:     
+    methods:      [GET]
+    requirements:
+        start:    \d+
+        end:      \d+
+        sort:     "[\+\-](?:id|username|name|surname|email|gender|admin|active)"

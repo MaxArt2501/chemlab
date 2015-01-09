@@ -16,10 +16,14 @@
 	{{ navbar.draw() }}
 	<div class="container">
 		<h2>{{ pageTitle }}</h2>
+        <h3>
+            {% if is_granted('ROLE_ADMIN') %}<span class="glyphicon glyphicon-star" title="Utente amministratore"></span>{% endif %}
+            {{ app.user.name }} {{ app.user.surname }} -
+            <a href="{{ path('logout') }}" title="Effettua il logout da ChemLab"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+        </h3>
 		<hr/>
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
-        <h3><a href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></h3>
 	</div>
 {% endblock %}

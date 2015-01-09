@@ -4,6 +4,7 @@ namespace ChemLab\Utilities;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Semplice classe per l'implementazione di API REST
@@ -13,8 +14,6 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 
 	public function restAction($id, Request $request) {
 		$method = $request->getMethod();
-
-		$response = new Response('', 200, array( 'content-type' => 'application/json' ));
 
 		switch ($method) {
 
@@ -68,9 +67,7 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 				$manager->persist($entity);
 				$manager->flush();
 
-				$response->setStatusCode(204);
-
-				return $response;
+				break;
 
 			case Request::METHOD_DELETE:
 				$entity = $this->getEntity($id);
@@ -79,15 +76,14 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 					$manager = $this->getDoctrine()->getManager();
 					$manager->remove($entity);
 					$manager->flush();
-					$response->setStatusCode(204);
-
-					return $response;
 
 				} else $retobj = array( 'error' => 'Oggetto non trovato' );
 				break;
 		}
 
-		$response->setContent(json_encode($retobj));
+		$response = isset($retobj)
+				? new JsonResponse($retobj)
+				: new Response('', 204);
 
         return $response;
     }
@@ -96,12 +92,8 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 		$start = intval($start);
 		$end = intval($end);
 
-		$response = new Response('', 200, array( 'content-type' => 'application/json' ));
-
-		if ($start > $end) {
-			$response->setContent(json_encode(array( 'error' => 'Selezione non valida' )));
-			return $response;
-		}
+		if ($start > $end)
+			return new JsonResponse(array( 'error' => 'Selezione non valida' ));
 
 		$repo = $this->getDoctrine()->getRepository($this->repository);
 		$qb = $repo->createQueryBuilder('i')
@@ -164,12 +156,10 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 			$qb->where($filter);
 		$total = $qb->getQuery()->getSingleResult();
 
-		$response->setContent(json_encode(array(
+        return new JsonResponse(array(
 			'list' => $list,
 			'total' => intval($total[1])
-		)));
-
-        return $response;
+		));
 	}
 
 	/**

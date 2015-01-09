@@ -1,7 +1,4 @@
 {% macro draw(current) %}
-{% set items = [
-	{'head': 'Home', 'path': '/', 'name': 'chem_lab_main_homepage'}
-] %}
 {% if not current %}
     {% set current = app.request.attributes.get('_route') %}
 {% endif %}
@@ -11,7 +8,7 @@
 				<ul class="nav navbar-nav">
 				{%- for key, item in main_navbar -%}
 					{%- if routeExists(item.route) and (not item.role is defined or is_granted(item.role)) -%}
-					<li{% if item.route == current %} class="active"{% endif %}><a href="{{ path('' ~ item.route) }}">{{ item.desc }}</a></li>
+					<li{% if item.route == current %} class="active"{% endif %} data-section-name="{{ key }}"><a href="{{ path('' ~ item.route) }}"> {{ item.desc }}</a></li>
 					{%- endif -%}
 				{%- endfor -%}
 				</ul>

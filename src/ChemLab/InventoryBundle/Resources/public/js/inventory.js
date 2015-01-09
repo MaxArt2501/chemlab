@@ -10,8 +10,7 @@ ListManager.init({
 		location: 0,
 		quantity: 0,
 		notes: ""
-	},
-	sortFields: [ "id", "item", "location", "quantity", "notes" ]
+	}
 });
 
 $(function() {
