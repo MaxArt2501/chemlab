@@ -6,10 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class SecurityControllerTest extends WebTestCase {
     public function testLogin() {
 		// Utenti di test:
-		// admin:theAdmin
+		// admin:theAdmin (admin)
 		// testuser:commonuser
-		// thequeen:OffWithTheHead
-		// disableduser:lousypassword
+		// thequeen:OffWithTheHead (admin)
+		// disableduser:lousypassword (non attivo)
 		$client = static::createClient();
 
 		$crawler = $client->request('GET', '/login');

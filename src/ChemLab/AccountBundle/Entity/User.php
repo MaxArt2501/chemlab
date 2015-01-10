@@ -54,6 +54,7 @@ class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface
      *
      * @ORM\Column(name="password", type="string", length=255)
      * @Assert\NotBlank(message = "La password non può essere vuota")
+     * @Assert\Length(min = 6, minMessage = "Lunghezza minima: {{ limit }} caratteri")
      */
     protected $password;
 
@@ -70,6 +71,7 @@ class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface
      * @var boolean
      *
      * @ORM\Column(name="gender", type="string", length=1)
+     * @Assert\NotBlank(message = "Specificare un genere")
      * @Assert\Regex(pattern="/^[FMN]$/", message="Genere non valido")
      */
     protected $gender;
@@ -96,6 +98,7 @@ class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface
     protected $orders;
 
     public function __construct() {
+        $this->admin = false;
         $this->active = true;
 		$this->orders = new ArrayCollection();
     }

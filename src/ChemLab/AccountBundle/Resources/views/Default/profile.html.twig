@@ -3,7 +3,8 @@
 {% import '::flashes.html.twig' as flashes %}
 
 {% set pageTitle = 'Profilo personale' %}
-{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme prfform 'bootstrap_3_horizontal_layout.html.twig' %}
+{% form_theme pwdform 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
 
@@ -24,9 +25,9 @@
             {{ app.user.name }} {{ app.user.surname }} -
             <a href="{{ path('logout') }}" title="Effettua il logout da ChemLab"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
         </h3>
+        {{ form(prfform) }}
 		<hr/>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+        <h3>Cambio password</h3>
+        {{ form(pwdform) }}
 	</div>
 {% endblock %}

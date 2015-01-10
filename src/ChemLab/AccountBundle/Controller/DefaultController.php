@@ -1,8 +1,9 @@
 <?php
-
 namespace ChemLab\AccountBundle\Controller;
 
 use ChemLab\AccountBundle\Entity\User;
+use ChemLab\AccountBundle\Form\ChangePasswordType;
+use ChemLab\AccountBundle\Form\Model\ChangePassword;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,8 @@ class DefaultController extends Controller {
 	public function profileAction(Request $request) {
 
 		$user = $this->getUser();
-		$form = $this->createFormBuilder($user)
+
+		$prfform = $this->get('form.factory')->createNamedBuilder('prfform', 'form', $user)
 				->add('name', 'text', array( 'label' => 'Nome', 'required' => true ))
 				->add('surname', 'text', array( 'label' => 'Cognome', 'required' => true ))
 				->add('email', 'email', array( 'required' => true ))
@@ -23,27 +25,36 @@ class DefaultController extends Controller {
 					'choices'   => array( 'N' => 'N/A', 'F' => 'Femmina', 'M' => 'Maschio' ),
 					'required'  => true, 'label' => 'Sesso'
 				))
-				// ->add('password', 'repeated', array(
-					// 'type' => 'password',
-					// 'invalid_message' => 'Le password non coincidono',
-					// 'first_options'  => array('label' => 'Nuova password'),
-					// 'second_options' => array('label' => 'Ripeti password')
-				// ))
-				->add('save', 'submit', array('label' => 'Imposta profilo', 'attr' => array( 'class' => 'btn-primary' )))
+				->add('prfsave', 'submit', array('label' => 'Imposta profilo', 'attr' => array( 'class' => 'btn-primary' )))
 				->getForm();
 
-		$form->handleRequest($request);
+		$pwdform = $this->createForm(new ChangePasswordType(), new ChangePassword());
 
-		if ($form->isValid()) {
-			$manager = $this->getDoctrine()->getManager();
-			$manager->persist($user);
-			$manager->flush();
+		if ($request->getMethod() === Request::METHOD_POST) {
 
-			$request->getSession()->getFlashBag()->add('success', 'Impostazioni cambiate con successo');
-			return $this->redirect($this->generateUrl('chem_lab_main_homepage'));
+			if ($request->request->has($prfform->getName())) {
+				$form = $prfform;
+				$form->handleRequest($request);
+				$flash = 'Impostazioni cambiate con successo';
+			} elseif ($request->request->has($pwdform->getName())) {
+				$form = $pwdform;
+				$form->handleRequest($request);
+				$user->setPassword($this->container->get('security.password_encoder')
+						->encodePassword($user, $form->getData()->getNewPassword()));
+				$flash = 'Password cambiata con successo';
+			}
+
+			if (isset($form) && $form->isValid()) {
+				$manager = $this->getDoctrine()->getManager();
+				$manager->persist($user);
+				$manager->flush();
+
+				$request->getSession()->getFlashBag()->add('success', $flash);
+			}
 		}
 
-		return $this->render('ChemLabAccountBundle:Default:profile.html.twig', array( 'form' => $form->createView() ));
+		return $this->render('ChemLabAccountBundle:Default:profile.html.twig',
+				array( 'prfform' => $prfform->createView(), 'pwdform' => $pwdform->createView() ));
 	}
 
 }
