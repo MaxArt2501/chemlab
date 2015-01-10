@@ -1,5 +1,6 @@
 {% extends '::base.html.twig' %}
 {% import '::navbar.html.twig' as navbar %}
+{% import '::flashes.html.twig' as flashes %}
 
 {% block title %}ChemLab - gestore laboratorio{% endblock %}
 
@@ -16,6 +17,7 @@
 	{{ navbar.draw() }}
 	<div class="container">
 		<h2 id="mainTitle">ChemLab - gestore laboratorio</h2>
+        {{ flashes.draw() }}
 		<hr/>
         {% if app.user %}
         <h3 id="userWelcome">Benvenut{% if app.user.gender == "F" %}a{% else %}o{% endif %}, {{ app.user.name }} {{ app.user.surname }}.</h3>

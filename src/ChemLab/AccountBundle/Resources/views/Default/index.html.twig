@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 {% import '::navbar.html.twig' as navbar %}
+{% import '::flashes.html.twig' as flashes %}
+
 {% set pageTitle = 'Gestione utenti' %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
@@ -19,9 +21,11 @@
 {% block body %}
 	{{ navbar.draw() }}
 	<div class="container">
-		<h2>{{ pageTitle }}</h2>
+		<h2 id="mainTitle">{{ pageTitle }}</h2>
+        {{ flashes.draw() }}
+		<hr/>
         <nav id="mainPagination"></nav>
-        <button type="button" class="btn btn-primary" id="addLocation" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi utente</button>
+        <button type="button" class="btn btn-primary" id="addUser" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi utente</button>
         <div id="tableOutput"></div>
 	</div>
     <div id="entityModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="entityModalLabel" aria-hidden="true">

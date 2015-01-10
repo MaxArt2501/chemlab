@@ -33,14 +33,13 @@ class SecurityController extends Controller {
 				$error = 'Utenza non attiva';
 			elseif ($error instanceof \Exception)
 				$error = $error->getMessage().' ('.get_class($error).')';
+
+			$request->getSession()->getFlashBag()->add('danger', $error);
 		}
 
         $last = is_null($session) ? '' : $session->get(Security::LAST_USERNAME);
 
-        return $this->render(
-            'ChemLabAccountBundle:Security:login.html.twig',
-            array( 'last' => $last, 'error' => $error )
-        );
+        return $this->render('ChemLabAccountBundle:Security:login.html.twig', array( 'last' => $last ));
     }
 
 	public function registerAction(Request $request) {

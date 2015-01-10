@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 {% import '::navbar.html.twig' as navbar %}
+{% import '::flashes.html.twig' as flashes %}
+
 {% set pageTitle = 'Gestione inventario' %}
 
 {% block title %}{{ pageTitle }}{% endblock %}
@@ -20,10 +22,12 @@
 {% block body %}
 	{{ navbar.draw() }}
 	<div class="container">
-		<h2>{{ pageTitle }}</h2>
+		<h2 id="mainTitle">{{ pageTitle }}</h2>
+        {{ flashes.draw() }}
+		<hr/>
         <nav id="mainPagination"></nav>
 {% if is_granted('ROLE_ADMIN') %}
-        <button type="button" class="btn btn-primary" id="addLocation" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi oggetto</button>
+        <button type="button" class="btn btn-primary" id="addEntry" data-toggle="modal" data-target="#entityModal"><span class="glyphicon glyphicon-plus"></span> Aggiungi oggetto</button>
 {% endif %}
         <div id="tableOutput"></div>
 	</div>

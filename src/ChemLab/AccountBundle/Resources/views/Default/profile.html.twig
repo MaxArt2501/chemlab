@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 {% import '::navbar.html.twig' as navbar %}
+{% import '::flashes.html.twig' as flashes %}
+
 {% set pageTitle = 'Profilo personale' %}
 {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 
@@ -15,7 +17,8 @@
 {% block body %}
 	{{ navbar.draw() }}
 	<div class="container">
-		<h2>{{ pageTitle }}</h2>
+		<h2 id="mainTitle">{{ pageTitle }}</h2>
+        {{ flashes.draw() }}
         <h3>
             {% if is_granted('ROLE_ADMIN') %}<span class="glyphicon glyphicon-star" title="Utente amministratore"></span>{% endif %}
             {{ app.user.name }} {{ app.user.surname }} -

@@ -23,12 +23,12 @@ class DefaultController extends Controller {
 					'choices'   => array( 'N' => 'N/A', 'F' => 'Femmina', 'M' => 'Maschio' ),
 					'required'  => true, 'label' => 'Sesso'
 				))
-				->add('password', 'repeated', array(
-					'type' => 'password',
-					'invalid_message' => 'Le password non coincidono',
-					'first_options'  => array('label' => 'Nuova password'),
-					'second_options' => array('label' => 'Ripeti password')
-				))
+				// ->add('password', 'repeated', array(
+					// 'type' => 'password',
+					// 'invalid_message' => 'Le password non coincidono',
+					// 'first_options'  => array('label' => 'Nuova password'),
+					// 'second_options' => array('label' => 'Ripeti password')
+				// ))
 				->add('save', 'submit', array('label' => 'Imposta profilo', 'attr' => array( 'class' => 'btn-primary' )))
 				->getForm();
 
@@ -39,6 +39,7 @@ class DefaultController extends Controller {
 			$manager->persist($user);
 			$manager->flush();
 
+			$request->getSession()->getFlashBag()->add('success', 'Impostazioni cambiate con successo');
 			return $this->redirect($this->generateUrl('chem_lab_main_homepage'));
 		}
 

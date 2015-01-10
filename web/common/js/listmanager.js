@@ -365,7 +365,7 @@
 							$.each(json.fields, function(key, message) {
 								var $field = $this.find("[name='" + key + "']");
 								if ($field.length) {
-									$field.parent().append(ListManager.templates.alert.render({ type: "warning", message: message }));
+									$field.parent().append(ListManager.templates.fielderror.render({ message: message }));
 									$field.closest(".form-group").addClass("has-error");
 								}
 							});

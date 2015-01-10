@@ -1,0 +1,33 @@
+{% macro draw(type) %}
+{% import _self as flashes %}
+{% if type %}
+    {% for message in app.session.flashbag.get(type) %}
+        {% if message[:1] == "*" %}
+            {{ flashes.drawDismissibleAlert(type, message[1:]) }}
+        {% else %}
+            {{ flashes.drawAlert(type, message) }}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% for ftype, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            {% if message[:1] == "*" %}
+                {{ flashes.drawDismissibleAlert(ftype, message[1:]) }}
+            {% else %}
+                {{ flashes.drawAlert(ftype, message) }}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro drawAlert(type, message) %}
+<div class="alert alert-{{ type }}" role="alert">{{ message|raw }}</div>
+{% endmacro %}
+
+{% macro drawDismissibleAlert(type, message) %}
+<div class="alert alert-{{ type }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Nascondi"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button>
+    {{ message|raw }}
+</div>
+{% endmacro %}

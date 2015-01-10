@@ -1,4 +1,5 @@
 {% extends '::base.html.twig' %}
+{% import '::flashes.html.twig' as flashes %}
 
 {% block title %}Login{% endblock %}
 
@@ -10,9 +11,10 @@
 	<div class="container">
         <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 col-xs-12">
             <form class="jumbotron" id="loginForm" action="{{ path("login_check") }}" method="post">
-                <h2>Login</h2>
-{% if error %}
-                <div class="alert alert-danger">{{ error }}</div>
+                <h2 id="mainTitle">Login</h2>
+                {{ flashes.draw() }}
+{% if app.user %}
+                <h5 id="loggedAs">Loggato come: <span>{{ app.user.name }} {{ app.user.surname }}</span></h5>
 {% endif %}
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
