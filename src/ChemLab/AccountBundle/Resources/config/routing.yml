@@ -2,6 +2,10 @@ chem_lab_account_homepage:
     path:     /access
     defaults: { _controller: ChemLabAccountBundle:Default:index }
 
+chem_lab_account_register:
+    path:     /register
+    defaults: { _controller: ChemLabAccountBundle:Security:register }
+
 chem_lab_account_profile:
     path:     /profile
     defaults: { _controller: ChemLabAccountBundle:Default:profile }

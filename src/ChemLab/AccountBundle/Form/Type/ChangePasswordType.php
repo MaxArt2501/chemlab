@@ -1,5 +1,5 @@
 <?php
-namespace ChemLab\AccountBundle\Form;
+namespace ChemLab\AccountBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +13,7 @@ class ChangePasswordType extends AbstractType {
 				'invalid_message' => 'Le password devono coincidere',
 				'required' => true,
 				'first_options'  => array('label' => 'Nuova password'),
-				'second_options' => array('label' => 'Converma password'),
+				'second_options' => array('label' => 'Conferma password')
 			))
 			->add('pwdsave', 'submit', array(
 				'label' => 'Cambia password',

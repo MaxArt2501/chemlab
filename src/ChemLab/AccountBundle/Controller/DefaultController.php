@@ -2,7 +2,7 @@
 namespace ChemLab\AccountBundle\Controller;
 
 use ChemLab\AccountBundle\Entity\User;
-use ChemLab\AccountBundle\Form\ChangePasswordType;
+use ChemLab\AccountBundle\Form\Type\ChangePasswordType;
 use ChemLab\AccountBundle\Form\Model\ChangePassword;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
