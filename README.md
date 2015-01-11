@@ -46,7 +46,7 @@ ChemLab ha dipendenza da [doctrine/doctrine-fixture-bundle](https://github.com/d
 
 Si rammenta che, di default, le fixtures per gli ambienti `prod` e `dev` andranno sullo stesso database.
 
-Vengono forniti alcuni utenti con cui iniziare, tra cui `admin:theAdmin` e `testuser:commonuser` come utenti rispettivamente amministratore e comune. L'elenco completo degli utenti con i relativi dati è presente nei file [User_prod.json](src/ChemLab/AccountBundle/DataFixtures/User_prod.json), [User_dev.json](src/ChemLab/AccountBundle/DataFixtures/User_dev.json) e [User_test.json](src/ChemLab/AccountBundle/DataFixtures/User_test.json). Specialmente per l'ambiente di produzione, si raccomanda di cambiare immediatamente le password.
+Vengono forniti alcuni utenti con cui iniziare, tra cui `admin:theAdmin` e `testuser:commonuser` come utenti rispettivamente amministratore e comune. L'elenco completo degli utenti con i relativi dati è presente nei file [user_prod.json](src/ChemLab/AccountBundle/DataFixtures/user_prod.json), [user_dev.json](src/ChemLab/AccountBundle/DataFixtures/user_dev.json) e [user_test.json](src/ChemLab/AccountBundle/DataFixtures/user_test.json). Specialmente per l'ambiente di produzione, si raccomanda di cambiare immediatamente le password.
 
 ChemLab è ora pronta per l'esecuzione:
 
