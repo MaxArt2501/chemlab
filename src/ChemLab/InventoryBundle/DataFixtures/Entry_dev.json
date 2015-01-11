@@ -1,13 +1,13 @@
 [
 	{
 		"item": "Acido Solforico purissimo",
-		"location": "Armadio A",
+		"location": "Armadio A1",
 		"quantity": 3,
 		"notes": "Da usare con cautela"
 	},
 	{
 		"item": "Catecolo",
-		"location": "Armadio A",
+		"location": "Armadio A1",
 		"quantity": 1,
 		"notes": "Inserimento automatico da ordine"
 	}

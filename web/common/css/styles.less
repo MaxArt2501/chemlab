@@ -171,3 +171,40 @@ li[data-section-name] {
     &[data-section-name="catalog"] > a:before { &:extend(.glyphicon-book:before); }
     &[data-section-name="access"] > a:before { &:extend(.glyphicon-user:before); }
 }
+
+.form-horizontal {
+    @media (min-width: @screen-sm-min) {
+        .field-replacement {
+            margin-bottom: 0;
+            padding-top: (@padding-base-vertical + 1); // Default padding plus a border
+        }
+    }
+
+    .form-group-lg {
+        @media (min-width: @screen-sm-min) {
+            .field-replacement {
+                padding-top: ((@padding-large-vertical * @line-height-large) + 1);
+            }
+        }
+    }
+    .form-group-sm {
+        @media (min-width: @screen-sm-min) {
+            .field-replacement {
+                padding-top: (@padding-small-vertical + 1);
+            }
+        }
+    }
+}
+
+.thumb-screencap {
+    border-radius: @border-radius-base;
+    border: 1px solid #ddd;
+    background-color: lighten(@body-bg, 2%);
+    padding-top: @padding-base-vertical;
+    padding-bottom: @padding-base-vertical;
+
+    > img {
+        max-width: 100%;
+        border-radius: @border-radius-large;
+    }
+}

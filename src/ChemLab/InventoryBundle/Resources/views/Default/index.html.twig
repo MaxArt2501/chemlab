@@ -78,6 +78,9 @@
                     <div class="alert alert-danger hidden"></div>
                 </div>
                 <div class="modal-footer">
+{% if is_granted('ROLE_ADMIN') %}
+                    <button type="button" class="btn btn-danger hide-if-new" data-warning-message="Sei sicuro di voler eliminare questi oggetti dall'inventario?">Elimina</button>
+{% endif %}
                     <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">Salva</button>
                 </div>

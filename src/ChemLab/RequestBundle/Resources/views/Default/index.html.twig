@@ -59,17 +59,16 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Richiedente</label>
-                            <div class="col-sm-9" data-default-owner="{{ app.user.name }} {{ app.user.surname }}" id="orderOwner"></div>
+                            <div class="col-sm-9 field-replacement" data-default-owner="{{ app.user.name }} {{ app.user.surname }}" id="orderOwner"></div>
                         </div>
                         <div class="form-group">
                             <label for="orderItem" class="col-sm-3 control-label">Articolo</label>
                             <div class="col-sm-9">
-                                <select class="form-control hide-if-edit" id="orderItem" name="item">
+                                <select class="form-control disable-if-edit" id="orderItem" name="item">
                                     {%- for item in items -%}
                                     <option value="{{ item.id }}" data-item-price="{{ item.price }}" data-item-description="{{ item.description }}">{{ item.name }}</option>
                                     {%- endfor -%}
                                 </select>
-                                <div class="hide-if-new" id="orderItemEditName"></div>
                                 <div id="orderItemDescription"></div>
                             </div>
                         </div>
@@ -77,14 +76,14 @@
                         <div class="form-group">
                             <label for="orderQuantity" class="col-sm-3 control-label">Quantità</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control hide-if-edit" id="orderQuantity" name="quantity" min="1" required="required"/>
+                                <input type="number" class="form-control disable-if-edit" id="orderQuantity" name="quantity" min="1" required="required"/>
                                 <span class="hide-if-edit blocked-output"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="orderTotal" class="col-sm-3 control-label">Totale</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control hide-if-edit" id="orderTotal" name="total" min="0.01" step="0.01" required="required"/>
+                                <input type="number" class="form-control disable-if-edit" id="orderTotal" name="total" min="0.01" step="0.01" required="required"/>
                                 <span class="hide-if-edit blocked-output"></span>
                             </div>
                         </div>
@@ -104,8 +103,11 @@
                     <div class="alert alert-danger hidden"></div>
                 </div>
                 <div class="modal-footer">
+{% if is_granted('ROLE_ADMIN') %}
+                    <button type="button" class="btn btn-danger hide-if-new" data-warning-message="Gli ordini possono essere annullati, mantenendo così il tracciato storico. Sei sicuro di voler eliminare l'ordine?">Elimina</button>
+{% endif %}
                     <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
-                    <button type="submit" class="btn btn-primary">Salva</button>
+                    <button type="submit" class="btn btn-primary{% if not is_granted('ROLE_ADMIN') %} hide-if-edit{% endif %}">Salva</button>
                 </div>
             </form>
         </div>

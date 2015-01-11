@@ -13,6 +13,10 @@ class DefaultController extends Controller {
 		return $this->render('ChemLabAccountBundle:Default:index.html.twig');
 	}
 
+	/**
+	 * Azione per la pagina di cambiamento profilo e password. Sono gestiti due
+	 * form (prfform e pwdform).
+	 */
 	public function profileAction(Request $request) {
 
 		$user = $this->getUser();

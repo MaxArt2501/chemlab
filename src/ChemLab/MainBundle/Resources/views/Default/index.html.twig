@@ -19,9 +19,8 @@
 		<h2 id="mainTitle">ChemLab - gestore laboratorio</h2>
         {{ flashes.draw() }}
 		<hr/>
-        {% if app.user %}
+{% if app.user %}
         <h3 id="userWelcome">Benvenut{% if app.user.gender == "F" %}a{% else %}o{% endif %}, {{ app.user.name }} {{ app.user.surname }}.</h3>
-        {% endif %}
         <h4>Ultimi ordini</h4>
         {% if orders|length %}
         <table class="table table-striped" id="lastOrders">
@@ -45,6 +44,27 @@
         {% else %}
         <em id="lastOrders">Nessun ordine negli archivi</em>
         {% endif %}
+{% else %}
+        <div class="row">
+            <div class="col-sm-3 thumb-screencap">
+                <img src="/common/images/main-sc.png" alt="Schermata principale" />
+            </div>
+            <div class="col-sm-9">
+                <p>Il posto ideale per la gestione dell'inventario del tuo laboratorio. Effettua gli ordini, osservane l'evoluzione, tieni aggiornato l'elenco dell'attrezzatura con semplicità.</p>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-sm-3 thumb-screencap">
+                <img src="/common/images/catalog-sc.png" alt="Gestione catalogo" />
+            </div>
+            <div class="col-sm-9">
+                <p>Gli amministratori possono inoltre gestire gli ordini, il catalogo da cui effettuare gli ordini e le locazioni del laboratorio.</p>
+            </div>
+        </div>
+        <h4><a href="{{ path('chem_lab_account_register') }}"><span class="glyphicon glyphicon-pencil"></span> Registrati</a>
+            ora, o effettua il <a href="{{ path('login') }}"><span class="glyphicon glyphicon-log-in"></span> login</a>.</h4>
+{% endif %}
         <!-- {{ data }} -->
 	</div>
 {% endblock %}

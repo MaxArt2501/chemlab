@@ -1,4 +1,6 @@
-@body-bg:             hsl(263, 100%, 96%);
+@brand-primary:       hsl(264, 100%, 50%);
+
+@body-bg:             lighten(@brand-primary, 46%);
 
 @border-radius-base:  3px;
 @border-radius-large: 4px;
@@ -6,3 +8,18 @@
 
 @jumbotron-bg:        lighten(@body-bg, 2%);
 @jumbotron-shadow:    0 1px 2px rgba(0, 0, 0, 0.35);
+
+// Inverted navbar
+// Reset inverted navbar basics
+@navbar-inverse-color:                      lighten(@navbar-inverse-bg, 60%);
+@navbar-inverse-bg:                         darken(@brand-primary, 20%);
+@navbar-inverse-border:                     darken(@navbar-inverse-bg, 15%);
+
+// Inverted navbar links
+@navbar-inverse-link-color:                 lighten(@navbar-inverse-bg, 60%);
+@navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
+@navbar-inverse-link-active-bg:             darken(@navbar-inverse-bg, 10%);
+@navbar-inverse-link-disabled-color:        darken(@navbar-inverse-bg, 20%);
+
+// Inverted navbar brand label
+@navbar-inverse-brand-color:                @navbar-inverse-link-color;

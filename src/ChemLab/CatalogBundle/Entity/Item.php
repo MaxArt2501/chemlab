@@ -69,14 +69,14 @@ class Item extends ArrayEntity {
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ChemLab\InventoryBundle\Entity\Entry", mappedBy="item")
+     * @ORM\OneToMany(targetEntity="ChemLab\InventoryBundle\Entity\Entry", mappedBy="item", cascade={"all"})
      */
     protected $entries;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ChemLab\RequestBundle\Entity\Order", mappedBy="item")
+     * @ORM\OneToMany(targetEntity="ChemLab\RequestBundle\Entity\Order", mappedBy="item", cascade={"all"})
      */
     protected $orders;
 

@@ -5,8 +5,6 @@ namespace ChemLab\RequestBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\Utilities\ArrayEntity;
-use ChemLab\InventoryBundle\Entity\Item;
-use ChemLab\AccountBundle\Entity\User;
 
 /**
  * Order
@@ -160,7 +158,7 @@ class Order extends ArrayEntity {
      * @param \ChemLab\CatalogBundle\Entity\Item $item
      * @return Order
      */
-    public function setItem(\ChemLab\CatalogBundle\Entity\Item $item = null)
+    public function setItem($item = null)
     {
         $this->item = $item;
 
@@ -183,7 +181,7 @@ class Order extends ArrayEntity {
      * @param \ChemLab\AccountBundle\Entity\User $owner
      * @return Order
      */
-    public function setOwner(\ChemLab\AccountBundle\Entity\User $owner = null)
+    public function setOwner($owner = null)
     {
         $this->owner = $owner;
 

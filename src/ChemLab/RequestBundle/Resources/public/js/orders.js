@@ -46,7 +46,7 @@ $(function() {
 
 		var $oo = $modal.find("#orderOwner");
 		if (id) {
-			$modal.find("#orderItemEditName").html(entity.item.name);
+			$modal.find("#orderItem").val(entity.item.id);
 			$modal.find("#orderItemDescription").html(textile.convert("*" + entity.item.price.toFixed(2) + "€* - " + entity.item.description));
 			$oo.text(entity.owner.name + " " + entity.owner.surname);
 		} else $oo.text($oo.attr("data-default-owner"));

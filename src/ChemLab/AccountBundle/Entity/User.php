@@ -95,7 +95,7 @@ class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ChemLab\RequestBundle\Entity\Order", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="ChemLab\RequestBundle\Entity\Order", mappedBy="owner", cascade={"all"})
      */
     protected $orders;
 

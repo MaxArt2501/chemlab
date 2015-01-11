@@ -48,6 +48,12 @@ abstract class FixtureLoader extends AbstractFixture implements OrderedFixtureIn
 		$this->container = $container;
 	}
 
+	/**
+	 * Imposta l'ordine di esecuzione del caricamento dati
+	 *
+	 * @param integer $order
+	 * @return FixtureLoader
+	 */
 	protected function setOrder($order) {
 		$this->order = $order;
 
@@ -61,6 +67,12 @@ abstract class FixtureLoader extends AbstractFixture implements OrderedFixtureIn
 		return $this->order;
 	}
 
+	/**
+	 * Imposta la classe dell'entità di riferimento
+	 *
+	 * @param string $class
+	 * @return FixtureLoader
+	 */
 	protected function setEntityClass($class) {
 		$this->entityClass = $class;
 
@@ -99,6 +111,16 @@ abstract class FixtureLoader extends AbstractFixture implements OrderedFixtureIn
 
 	}
 
+	/**
+	 * Funzione per override di processamento dati. Da definire per impostare
+	 * i dati corretti per l'importazione nell'entità. Ad esempio, se nei file
+	 * di dati ci fosse una password in chiaro, dataProcess potrebbe occuparsi
+	 * di criptarla per inserirla nell'entità, che poi andrà in persistenza.
+	 *
+	 * @param array $data             Array di dati per l'entità
+	 * @param ObjectManager $manager
+	 * @return array
+	 */
 	protected function dataProcess(array $data, ObjectManager $manager) {
 		return $data;
 	}

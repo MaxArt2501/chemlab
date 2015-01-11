@@ -58,7 +58,7 @@ class Location extends ArrayEntity {
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ChemLab\InventoryBundle\Entity\Entry", mappedBy="location")
+     * @ORM\OneToMany(targetEntity="ChemLab\InventoryBundle\Entity\Entry", mappedBy="location", cascade={"all"})
      */
     protected $entries;
 

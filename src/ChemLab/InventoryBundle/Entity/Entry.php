@@ -5,8 +5,6 @@ namespace ChemLab\InventoryBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\Utilities\ArrayEntity;
-use ChemLab\InventoryBundle\Entity\Item;
-use ChemLab\LocationBundle\Entity\Location;
 
 /**
  * Entry
@@ -122,7 +120,7 @@ class Entry extends ArrayEntity {
      * @param \ChemLab\InventoryBundle\Entity\Item $item
      * @return Entry
      */
-    public function setItem(Item $item = null)
+    public function setItem($item = null)
     {
         $this->item = $item;
 
@@ -145,7 +143,7 @@ class Entry extends ArrayEntity {
      * @param \ChemLab\LocationBundle\Entity\Location $location
      * @return Entry
      */
-    public function setLocation(Location $location = null)
+    public function setLocation($location = null)
     {
         $this->location = $location;
 

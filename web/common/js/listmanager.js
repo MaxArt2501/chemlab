@@ -290,7 +290,7 @@
 								$field.filter("[value='" + value + "']").prop("checked", true);
 							else $field.val(value);
 
-							$field.prop("disabled", $field.hasClass("hide-if-" + (id ? "edit" : "new")));
+							$field.prop("disabled", $field.hasClass("disable-if-" + (id ? "edit" : "new")));
 						}
 					});
 
@@ -331,6 +331,7 @@
 				fillForm();
 			}
 			$title.text($title.attr("data-" + title + "-title"));
+
 		}).on("submit", "form", function(e) {
 			e.preventDefault();
 
@@ -383,6 +384,31 @@
 					bootbox.alert("Operazione fallita: " + xhr.status + " " + message);
 					ListManager.spinner(false);
 				});
+
+		}).on("click", ".modal-footer > .btn-danger", function() {
+			var message = this.getAttribute("data-warning-message") || "Sei sicuro di voler procedere all'eliminazione?",
+				id = $modal.data("entityId");
+			if (!id) return;
+
+			bootbox.confirm(message, function(response) {
+				if (!response) return;
+				ListManager.spinner(true);
+				$.ajax({ url: ListManager.options.url + id, method: "DELETE", dataType: "json" })
+					.then(function(json) {
+						$modal.modal("hide");
+						if (json && json.error) {
+							ListManager.spinner(false);
+							bootbox.alert("Impossibile eseguire l'operazione: " + json.error);
+						} else {
+							$modal.modal("hide");
+							hashchange();
+							$modal.trigger("entity.deleted", [ id ]);
+						}
+					}, function(xhr, status, message) {
+						bootbox.alert("Operazione fallita: " + xhr.status + " " + message);
+						ListManager.spinner(false);
+					});
+			});
 		});
 
 		$filters.on("change", "select", function() {
