@@ -3,6 +3,9 @@ namespace ChemLab\Utilities;
 
 use ChemLab\Utilities\AuthWebTestCase;
 
+/**
+ * Classe astratta di utilità per il test delle API REST di ChemLab
+ */
 abstract class RESTWebTestCase extends AuthWebTestCase {
 	/**
 	 * @var string
@@ -19,6 +22,12 @@ abstract class RESTWebTestCase extends AuthWebTestCase {
 	 */
 	protected $entities;
 
+	/**
+	 * Imposta la classe dell'entità di riferimento
+	 *
+	 * @param string $class
+	 * @return AuthWebTestCase
+	 */
 	protected function setEntityClass($class) {
 		$this->assertTrue(class_exists($class));
 

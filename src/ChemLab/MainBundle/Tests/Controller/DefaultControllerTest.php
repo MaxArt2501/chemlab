@@ -15,7 +15,7 @@ class DefaultControllerTest extends AuthWebTestCase {
 		$this->assertCount(1, $crawler->filter('h4'));
 		$this->assertCount(0, $crawler->filter('#userWelcome'));
 		$this->assertCount(2, $crawler->filter('nav.navbar ul.nav.navbar-nav'));
-		$this->assertCount(1, $crawler->filter('a[href="'.static::LOGIN_PATH.'"]'));
+		$this->assertTrue($crawler->filter('a[href="'.static::LOGIN_PATH.'"]')->count() > 0);
 		$this->assertCount(0, $crawler->filter('a[href="/inventory"]'));
 		$this->assertCount(1, $crawler->filter('#lastOrders'));
 	}
@@ -27,7 +27,7 @@ class DefaultControllerTest extends AuthWebTestCase {
 		$this->assertTrue($client->getResponse()->isSuccessful());
 
 		$alink = $crawler->filter('a[href="'.static::LOGIN_PATH.'"]');
-		$this->assertCount(1, $alink);
+		$this->assertTrue($alink->count() > 0);
 
 		$user = $this->fakeLogin('admin');
 
@@ -55,7 +55,7 @@ class DefaultControllerTest extends AuthWebTestCase {
 		$this->assertTrue($client->getResponse()->isSuccessful());
 
 		$alink = $crawler->filter('a[href="'.static::LOGIN_PATH.'"]');
-		$this->assertCount(1, $alink);
+		$this->assertTrue($alink->count() > 0);
 
 		$user = $this->trueLogin('admin', 'theAdmin');
 

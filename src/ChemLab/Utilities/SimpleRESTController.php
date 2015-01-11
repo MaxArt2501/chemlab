@@ -7,11 +7,30 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Semplice classe per l'implementazione di API REST
+ * Semplice classe per l'implementazione di API REST e richiesta di liste
+ * di record ordinate e/o paginate.
  */
 abstract class SimpleRESTController extends Controller implements SimpleRESTControllerInterface {
 	protected $repository;
 
+	/**
+	 * Gestore delle API REST. Accetta i metodi GET, POST, PUT, PATCH e DELETE
+	 * per le operazioni CRUD sul database.
+	 * La configurazione tipica della rotta è del tipo:
+	 *
+	 * acme_rest_rest:
+	 *     path:         /items/{id}
+	 *     defaults:     { _controller: AcmeRestBundle:Rest:rest }
+	 *     methods:      [GET, POST, PUT, PATCH, DELETE]
+	 *     requirements: { id: \d+ }
+	 *
+	 * Nel caso di POST (cioè l'aggiunta di un record), l'id può essere un
+	 * numero qualsiasi - si usa lo 0 per convenzione.
+	 * La risposta è di tipo JSON in caso di GET, o negli altri casi se c'è un
+	 * errore (la risposta sarà un oggetto con proprietà "error").
+	 * Nel caso di operazioni di POST, PUT, PATCH o DELETE effettuate con
+	 * successo, verrà restituita una risposta vuota (status HTTP 204).
+	 */
 	public function restAction($id, Request $request) {
 		$method = $request->getMethod();
 
@@ -92,6 +111,45 @@ abstract class SimpleRESTController extends Controller implements SimpleRESTCont
         return $response;
     }
 
+	/**
+	 * Gestore richieste di liste paginate di entità. Vengono gestite
+	 * indicazioni di ordinamento della lista, e l'impostazione di filtri
+	 * (tramite query string).
+	 * La configurazione tipica della rotta è del tipo:
+	 *
+	 * chem_lab_location_list:
+	 *     path:         /items/{start}-{end}/{sort}
+	 *     defaults:     
+	 *         _controller: AcmeRestBundle:Rest:list
+	 *         sort:     
+	 *     methods:      [GET]
+	 *     requirements:
+	 *         start:    \d+
+	 *         end:      \d+
+	 *         sort:     "[\+\-](?:id|name|...)"
+	 *
+	 * La risposta è di tipo JSON, con le proprietà "list" (array delle
+	 * entità selezionate) e "total" (numero totale di record). In caso di
+	 * errore, la risposta sarà un oggetto con proprietà "error".
+	 *
+	 * Il parametro "start" non dev'essere maggiore di "end".
+	 * Il parametro facoltativo "sort" deve cominciare con "+" o "-" (per
+	 * indicare l'ordine ascendente o discendente), seguito da una colonna
+	 * di ordinamento dell'entità. Impostare l'espressione regolare di
+	 * conseguenza.
+	 *
+	 * Il filtro sulla lista viene indicato nella query string, ad esempio:
+	 *
+	 * /items/0-9?name=test&type=10
+	 *
+	 * Verrà imposta una condizione WHERE sulle colonne "name" e "type". Se
+	 * le colonne sono di tipo "string" o "text", la condizione è di tipo LIKE
+	 * usando il valore fornito come prefisso; negli altri casi, la condizione
+	 * è di uguaglianza.
+	 * Nell'esempio indicato risulterà:
+	 *
+	 * ... WHERE name LIKE "test%" AND type = 10
+	 */
 	public function listAction($start, $end, $sort, Request $request) {
 		$start = intval($start);
 		$end = intval($end);
