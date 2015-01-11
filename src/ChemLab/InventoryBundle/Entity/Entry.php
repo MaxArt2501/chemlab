@@ -55,6 +55,10 @@ class Entry extends ArrayEntity {
      */
     protected $notes;
 
+	public function __construct() {
+		$this->quantity = 0;
+		$this->notes = '';
+	}
 
     /**
      * Get id

@@ -29,7 +29,8 @@ class RegisterType extends AbstractType {
 			))
 			->add('accept', 'checkbox', array(
 				'required'  => true, 'mapped' => false,
-				'label' => 'Accetta i termini delle condizioni d\'uso'
+				'label' => 'Accetta i termini delle condizioni d\'uso',
+				'constraints' => [ new Assert\True( array( 'message' => 'Accettare i termini delle condizioni d\'uso' )) ]
 			))
 			->add('doregister', 'submit', array(
 				'label' => 'Registrami',

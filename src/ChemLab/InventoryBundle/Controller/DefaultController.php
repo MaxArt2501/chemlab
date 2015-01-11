@@ -6,6 +6,7 @@ use ChemLab\InventoryBundle\Entity\Entry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends Controller {
     public function indexAction() {
@@ -20,7 +21,9 @@ class DefaultController extends Controller {
     }
 
 	public function transferAction(Request $request) {
-		$response = new Response('', 204);
+		if (!$this->get('security.context')->isGranted('ROLE_ADMIN'))
+			return new JsonResponse(array( 'error' => 'Azione non consentita' ));
+
 		$data = $request->getContent();
 		$input = json_decode($data, true);
 
@@ -65,10 +68,8 @@ class DefaultController extends Controller {
 			$manager->flush();
 		}
 
-		if (isset($retobj))
-			$response->setStatusCode(200)
-					->setContent(json_encode($retobj))
-					->headers->add(array( 'content-type' => 'application/json' ));
+		$response = isset($retobj) ? new JsonResponse($retobj)
+				: new Response('', Response::HTTP_NO_CONTENT);
 
 		return $response;
 	}

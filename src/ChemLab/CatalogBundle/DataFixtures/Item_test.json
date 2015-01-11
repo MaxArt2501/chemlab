@@ -1,0 +1,16 @@
+[
+	{
+		"name": "Solvente A",
+		"description": "Descrizione A1",
+		"code": "A.1",
+		"type": "solvent",
+		"price": 12.3
+	},
+	{
+		"name": "Tiotimolina risublimata",
+		"description": "Con proprietà endocroniche",
+		"code": "TT-RS",
+		"type": "reagent",
+		"price": 47.5
+	}
+]

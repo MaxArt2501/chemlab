@@ -1,0 +1,14 @@
+[
+	{
+		"name": "Armadio A",
+		"position": "Piano 1",
+		"capacity": 123,
+		"notes": "Un armadio"
+	},
+	{
+		"name": "Scaffale S",
+		"position": "Stanza A113",
+		"capacity": 42,
+		"notes": "Un classico"
+	}
+]

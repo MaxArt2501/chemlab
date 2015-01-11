@@ -1,0 +1,156 @@
+[
+	{
+		"name": "Nitrato di Neodimio esaidrato 99.9%",
+		"description": "Nd(NO[~3~])[~3~]·6H[~2~]O, p.m. 438.35",
+		"code": "289175-25G",
+		"type": "reagent",
+		"price": 35.2
+	},
+	{
+		"name": "Cloruro di Erbio esaidrato 99.9%",
+		"description": "ErCl[~3~]·6H[~2~]O, p.m. 381.71",
+		"code": "289256-25G",
+		"type": "reagent",
+		"price": 87.2
+	},
+	{
+		"name": "Acetato di Itterbio tetraidrato",
+		"description": "Yb(C[~2~]H[~3~]O[~2~])[~3~] · 4H[~2~]O, p.m. 422.23",
+		"code": "326011-10G",
+		"type": "reagent",
+		"price": 49
+	},
+	{
+		"name": "Cloruro di Ferro(III) esaidrato",
+		"description": "FeCl[~3~]·6H[~2~]O, p.m. 270.30",
+		"code": "236489-100G",
+		"type": "reagent",
+		"price": 22.9
+	},
+	{
+		"name": "Tetrafluoroborato di Cobalto (II) esaidrato",
+		"description": "Co(BF[~4~])[~2~]·6H[~2~]O, p.m. 340.63",
+		"code": "399957-25G",
+		"type": "reagent",
+		"price": 43.8
+	},
+	{
+		"name": "8-idrossi-chinolina",
+		"description": "C[~9~]H[~7~] NO, p.m. 145.16",
+		"code": "16,498-4-25G",
+		"type": "reagent",
+		"price": 25.8
+	},
+	{
+		"name": "Catecolo",
+		"description": "C[~6~]H[~6~]O[~2~], p.m. 110.11",
+		"code": "135011-100G",
+		"type": "reagent",
+		"price": 81.7
+	},
+	{
+		"name": "Bromuro di Tetrabutilammonio",
+		"description": "C[~16~]H[~36~]NBr, p.m. 322.28",
+		"code": "182510-250G",
+		"type": "reagent",
+		"price": 54.5
+	},
+	{
+		"name": "Acido Nitrico purissimo",
+		"description": "HNO[~3~], p.m. 63.01",
+		"code": "30709-2.5L",
+		"type": "reagent",
+		"price": 10
+	},
+	{
+		"name": "Acido Solforico purissimo",
+		"description": "H[~2~]SO[~4~], p.m. 98.08",
+		"code": "30743-2.5L",
+		"type": "reagent",
+		"price": 8.8
+	},
+	{
+		"name": "Acido Cloridrico purissimo",
+		"description": "HCl, p.m. 36.46",
+		"code": "30721-2.5L",
+		"type": "reagent",
+		"price": 5
+	},
+	{
+		"name": "Etanolo",
+		"description": "CH[~3~]CH[~2~]OH, p.m. 46.07",
+		"code": "02860-2.5L",
+		"type": "solvent",
+		"price": 26.3
+	},
+	{
+		"name": "Metanolo",
+		"description": "CH[~3~]OH, p.m. 32.04",
+		"code": "32213-2.5L",
+		"type": "solvent",
+		"price": 5.1
+	},
+	{
+		"name": "Acetonitrile",
+		"description": "CH[~3~]CN, p.m. 41.05",
+		"code": "34851-2.5L",
+		"type": "solvent",
+		"price": 23
+	},
+	{
+		"name": "Acetone",
+		"description": "CH[~3~]COCH[~3~], p.m. 58.08",
+		"code": "24201-5L-R",
+		"type": "solvent",
+		"price": 10.9
+	},
+	{
+		"name": "Provette con tappo da 4 mL",
+		"description": "100 x 1",
+		"code": "27002-100EA",
+		"type": "glassware",
+		"price": 93.7
+	},
+	{
+		"name": "Beaker da 50 mL",
+		"description": "10 x 1",
+		"code": "Z231819-10EA",
+		"type": "glassware",
+		"price": 40.6
+	},
+	{
+		"name": "Beaker da 100 mL",
+		"description": "10 x 2",
+		"code": "Z231827-10EA",
+		"type": "glassware",
+		"price": 80.8
+	},
+	{
+		"name": "Beute con tappo da 100 mL",
+		"description": "10x1",
+		"code": "Z232890-10EA",
+		"type": "glassware",
+		"price": 243.2
+	},
+	{
+		"name": "Matracci da 25 mL",
+		"description": "2 x 3",
+		"code": "Z326712-2EA",
+		"type": "glassware",
+		"price": 84.3
+	},
+	{
+		"name": "Matracci da 10 mL",
+		"description": "2 x 3",
+		"code": "Z326720-2EA",
+		"type": "glassware",
+		"price": 82.5
+	},
+	{
+		"name": "Roba varia",
+		"description": "In pratica H[~2~]O",
+		"code": "H2O",
+		"type": "other",
+		"price": 0.1
+	}
+]

@@ -36,6 +36,7 @@ class Location extends ArrayEntity {
      * @var string
      *
      * @ORM\Column(name="position", type="string", length=255)
+     * @Assert\NotBlank(message = "Definire la posizione")
      */
     protected $position;
 

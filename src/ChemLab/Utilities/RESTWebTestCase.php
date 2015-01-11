@@ -3,7 +3,7 @@ namespace ChemLab\Utilities;
 
 use ChemLab\Utilities\AuthWebTestCase;
 
-class RESTWebTestCase extends AuthWebTestCase {
+abstract class RESTWebTestCase extends AuthWebTestCase {
 	/**
 	 * @var string
 	 */
@@ -24,20 +24,26 @@ class RESTWebTestCase extends AuthWebTestCase {
 
 		$this->entityClass = $class;
 		$this->repository = $this->manager->getRepository($class);
+
+		return $this;
 	}
 
 	/**
 	 * Restituisce il numero di entità nel repository, eventualmente filtrate
 	 * secondo le condizioni fornite.
 	 * @param array $filterParams
+	 * @param string [$class]  Classe dell'entità
 	 * @return number
 	 */
-	protected function getEntityCount(array $filterParams = null) {
-		$qb = $this->repository->createQueryBuilder('i');
+	protected function getEntityCount(array $filterParams = null, $class = null) {
+		$repo = $class === null ? $this->repository
+				: $this->manager->getRepository($class);
+
+		$qb = $repo->createQueryBuilder('e');
 
 		$filter = $this->buildFilter($qb, $filterParams);
 
-		$qb->select($qb->expr()->count('i.id'));
+		$qb->select($qb->expr()->count('e.id'));
 		if ($filter !== null)
 			$qb->where($filter);
 
@@ -52,8 +58,11 @@ class RESTWebTestCase extends AuthWebTestCase {
 	 * @param array $filterParams
 	 * @return Entity[]
 	 */
-	protected function getEntities(array $filterParams = null) {
-		$qb = $this->repository->createQueryBuilder('i')->select();
+	protected function getEntities(array $filterParams = null, $class = null) {
+		$repo = $class === null ? $this->repository
+				: $this->manager->getRepository($class);
+
+		$qb = $repo->createQueryBuilder('e')->select();
 
 		$filter = $this->buildFilter($qb, $filterParams);
 
@@ -87,9 +96,9 @@ class RESTWebTestCase extends AuthWebTestCase {
 				$type = $meta->fieldMappings[$key]['type'];
 				if (in_array($type, ['boolean', 'integer', 'smallint', 'bigint',
 						'datetime', 'datetimetz', 'date', 'time', 'decimal', 'float']))
-					$filters[] = $builder->expr()->eq("i.$key", $value);
+					$filters[] = $builder->expr()->eq("e.$key", $value);
 				elseif (in_array($type, ['string', 'text']))
-					$filters[] = $builder->expr()->like("i.$key",
+					$filters[] = $builder->expr()->like("e.$key",
 							$builder->expr()->literal("$value%"));
 
 			// Si verifica che la chiave sia un campo con chiave esterna
@@ -97,7 +106,7 @@ class RESTWebTestCase extends AuthWebTestCase {
 					&& is_null($meta->associationMappings[$key]['mappedBy'])
 					&& is_integer($value)) {
 
-				$filters[] = $builder->expr()->eq("i.$key", $value);
+				$filters[] = $builder->expr()->eq("e.$key", $value);
 
 			}
 		}
@@ -112,5 +121,40 @@ class RESTWebTestCase extends AuthWebTestCase {
 		}
 
 		return $filter;
+	}
+
+	/**
+	 * Elimina tutti i record dalla tabella del database
+	 * @param string [$class]  Classe dell'entità di cui svuotare il repository
+	 */
+	protected function clearRepository($class = null) {
+		$repo = $class === null ? $this->repository
+				: $this->manager->getRepository($class);
+		$repo->createQueryBuilder('')->delete()->getQuery()->getResult();
+	}
+
+	/**
+	 * Inserisce un'entità nel repository.
+	 * @param array $data      Dati da inserire nell'entità
+	 * @param string [$class]  Classe dell'entità
+	 * @return Entity
+	 */
+	protected function insertEntity(array $data, $class = null) {
+		$manager = $this->manager;
+		if ($class === null)
+			$class = $this->entityClass;
+
+		$entity = new $class();
+		$entity->fromArray($data);
+		$errors = $this->client->getContainer()->get('validator')->validate($entity);
+		if (count($errors))
+			foreach ($errors as $error)
+				echo $error->getPropertyPath(), ' => ', $error->getMessage(), "\n";
+		$this->assertCount(0, $errors);
+
+		$manager->persist($entity);
+		$manager->flush();
+
+		return $entity;
 	}
 }

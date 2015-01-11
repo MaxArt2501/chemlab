@@ -4,6 +4,7 @@ namespace ChemLab\AccountBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\RequestBundle\Entity\Order;
@@ -14,6 +15,7 @@ use ChemLab\Utilities\ArrayEntityInterface;
  *
  * @ORM\Table(name="appuser")
  * @ORM\Entity
+ * @UniqueEntity(fields = "username", message = "Esiste già un utente con questo nome")
  */
 class User implements AdvancedUserInterface, \Serializable, ArrayEntityInterface {
     /**

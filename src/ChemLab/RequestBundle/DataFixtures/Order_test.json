@@ -1,0 +1,16 @@
+[
+	{
+		"item": "Solvente A",
+		"owner": "admin",
+		"quantity": 3,
+		"total": 36.9,
+		"status": "issued"
+	},
+	{
+		"item": "Tiotimolina risublimata",
+		"owner": "testuser",
+		"quantity": 5,
+		"total": 22.5,
+		"status": "approved"
+	}
+]

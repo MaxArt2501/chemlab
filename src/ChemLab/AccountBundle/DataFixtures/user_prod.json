@@ -1,0 +1,22 @@
+[
+	{
+		"username": "admin",
+		"password": "theAdmin",
+		"name": "Mario",
+		"surname": "Rossi",
+		"email": "admin@chemlab.com",
+		"gender": "M",
+		"admin": 1,
+		"active": 1
+	},
+	{
+		"username": "testuser",
+		"password": "commonuser",
+		"name": "Uno",
+		"surname": "Qualunque",
+		"email": "uno@gmail.com",
+		"gender": "N",
+		"admin": 0,
+		"active": 1
+	}
+]

@@ -4,7 +4,7 @@ namespace ChemLab\Utilities;
 /**
  * Implementazione di default di ArrayEntityInterface
  */
-class ArrayEntity implements ArrayEntityInterface {
+abstract class ArrayEntity implements ArrayEntityInterface {
 
 	/**
 	 * Restituisce semplicemente tutte le proprietà pubbliche e protette

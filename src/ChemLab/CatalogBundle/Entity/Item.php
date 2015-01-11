@@ -4,6 +4,7 @@ namespace ChemLab\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use ChemLab\Utilities\ArrayEntity;
 use ChemLab\InventoryBundle\Entity\Entry;
@@ -14,6 +15,7 @@ use ChemLab\RequestBundle\Entity\Order;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @UniqueEntity(fields = "name", message = "Esiste già un articolo con questo nome")
  */
 class Item extends ArrayEntity {
     /**
@@ -28,7 +30,7 @@ class Item extends ArrayEntity {
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=80)
+     * @ORM\Column(name="name", type="string", length=80, unique=true)
      * @Assert\NotBlank(message = "Il nome dell'articolo non può essere vuoto")
      */
     protected $name;

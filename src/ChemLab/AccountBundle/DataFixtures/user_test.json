@@ -1,0 +1,42 @@
+[
+	{
+		"username": "admin",
+		"password": "theAdmin",
+		"name": "Mario",
+		"surname": "Rossi",
+		"email": "admin@chemlab.com",
+		"gender": "M",
+		"admin": 1,
+		"active": 1
+	},
+	{
+		"username": "testuser",
+		"password": "commonuser",
+		"name": "Uno",
+		"surname": "Qualunque",
+		"email": "uno@gmail.com",
+		"gender": "N",
+		"admin": 0,
+		"active": 1
+	},
+	{
+		"username": "thequeen",
+		"password": "OffWithTheHead",
+		"name": "Regina",
+		"surname": "Di Cuori",
+		"email": "thequeen@chemlab.com",
+		"gender": "F",
+		"admin": 1,
+		"active": 1
+	},
+	{
+		"username": "disableduser",
+		"password": "lousypassword",
+		"name": "Bruce",
+		"surname": "Banned",
+		"email": "b.banned@yahoo.com",
+		"gender": "M",
+		"admin": 0,
+		"active": 0
+	}
+]

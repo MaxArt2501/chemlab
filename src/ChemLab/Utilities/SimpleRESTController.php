@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Semplice classe per l'implementazione di API REST
  */
-class SimpleRESTController extends Controller implements SimpleRESTControllerInterface {
+abstract class SimpleRESTController extends Controller implements SimpleRESTControllerInterface {
 	protected $repository;
 
 	public function restAction($id, Request $request) {
@@ -70,6 +70,10 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 				break;
 
 			case Request::METHOD_DELETE:
+				if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+					$retobj = array( 'error' => 'Azione non consentita' );
+					break;
+				}
 				$entity = $this->getEntity($id);
 				if ($entity) {
 
@@ -83,7 +87,7 @@ class SimpleRESTController extends Controller implements SimpleRESTControllerInt
 
 		$response = isset($retobj)
 				? new JsonResponse($retobj)
-				: new Response('', 204);
+				: new Response('', Response::HTTP_NO_CONTENT);
 
         return $response;
     }

@@ -44,6 +44,7 @@ class Order extends ArrayEntity {
      * @var integer
      *
      * @ORM\Column(name="quantity", type="integer")
+     * @Assert\NotNull(message = "Indicare una quantità")
      * @Assert\GreaterThan(value=0, message="Inserire una quantità positiva")
      */
     protected $quantity;
@@ -52,7 +53,8 @@ class Order extends ArrayEntity {
      * @var float
      *
      * @ORM\Column(name="total", type="float")
-     * @Assert\GreaterThan(value=0, message="Inserire un totale positivo")
+     * @Assert\NotNull(message = "Indicare un costo totale")
+     * @Assert\GreaterThan(value=0, message="Inserire un costo totale positivo")
      */
     protected $total;
 

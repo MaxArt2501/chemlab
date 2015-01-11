@@ -17,8 +17,8 @@ swiftmailer:
 
 doctrine:
     dbal:
-        host:     "%database_test_host%"
-        port:     "%database_test_port%"
-        dbname:   "%database_test_name%"
-        user:     "%database_test_user%"
-        password: "%database_test_password%"
+        host:     127.0.0.1
+        port:     null
+        dbname:   chem_lab_test
+        user:     chemlab_test
+        password: chemlab_test_pwd

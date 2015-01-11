@@ -1,0 +1,14 @@
+[
+	{
+		"item": "Solvente A",
+		"location": "Armadio A",
+		"quantity": 3,
+		"notes": "Test a caso"
+	},
+	{
+		"item": "Tiotimolina risublimata",
+		"location": "Scaffale S",
+		"quantity": 5,
+		"notes": "Qualcosa in più"
+	}
+]

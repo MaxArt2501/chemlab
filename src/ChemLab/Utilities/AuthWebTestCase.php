@@ -3,12 +3,13 @@ namespace ChemLab\Utilities;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Classe astratta che fornisce metodi di utilità per il login all'applicazione
  */
-class AuthWebTestCase extends WebTestCase {
+abstract class AuthWebTestCase extends WebTestCase {
 	const LOGIN_PATH = '/login';
 	const LOGOUT_PATH = '/logout';
 	const AUTH_FIREWALL = 'main';
@@ -89,7 +90,7 @@ class AuthWebTestCase extends WebTestCase {
 	 */
 	protected function trueLogin($username, $password) {
 		$client = $this->client;
-		$crawler = $client->request('GET', static::LOGIN_PATH);
+		$crawler = $client->request(Request::METHOD_GET, static::LOGIN_PATH);
 
 		$loginForm = $crawler->filter('form#loginForm');
 		$this->assertCount(1, $loginForm);
@@ -115,7 +116,7 @@ class AuthWebTestCase extends WebTestCase {
 	 * L'utente deve essere preventivamente loggato.
 	 */
 	protected function trueLogout() {
-		$this->client->request('GET', static::LOGOUT_PATH);
+		$this->client->request(Request::METHOD_GET, static::LOGOUT_PATH);
 		$this->assertTrue($this->client->getResponse()->isRedirect());
 
 		$this->assertNull($this->getLoggedUser());
