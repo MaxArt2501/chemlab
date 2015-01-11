@@ -17,7 +17,7 @@ class DefaultControllerTest extends AuthWebTestCase {
 		$this->assertCount(2, $crawler->filter('nav.navbar ul.nav.navbar-nav'));
 		$this->assertTrue($crawler->filter('a[href="'.static::LOGIN_PATH.'"]')->count() > 0);
 		$this->assertCount(0, $crawler->filter('a[href="/inventory"]'));
-		$this->assertCount(1, $crawler->filter('#lastOrders'));
+		$this->assertCount(0, $crawler->filter('#lastOrders'));
 	}
 
 	public function testFakeLoginLogout() {
